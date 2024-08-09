@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<firmware style="reprapfirmware">
+    <!-- Name of the firmware -->
+    <name>RepRapFirmware 2</name>
+    <displayName>RepRapFirmware 2 (legacy)</displayName>
+    <!-- Commands send on connect. Use newline to insert multiple commands -->
+    <connectionCommands>M110 N1
+        M105
+        M115
+        M114
+        T0
+        G92 E0
+        G90
+        M82
+        G21
+        M408 S2
+        M408 S3
+        @getip
+    </connectionCommands>
+    <!-- Define main communication behaviour
+    okAfterResend - true id after resend:line a line with ok follows
+    protocol - Used communication protocol repetier or ascii
+    allowColonInAscii - Some firmwares have problems with : in ascii content like M117
+    -->
+    <com okAfterResend="false" protocol="ascii" allowColonInAscii="true" allowUTF8="true"/>
+    <!-- Is there a way to query and change eeprom settings?
+      none - No
+      repetier - Repetier format queried with M205 and set with M206
+      marlin - Marlin style report for M503
+      mk4due - Mk4due style report for M503 -->
+    <eepromType>none</eepromType>
+    <!-- how is E relative handled
+    preferRelative : G91 or E relative make it relative
+    override: G90/G91 overrides E mode
+    separate: G90/G91 do not influence E mode -->
+    <g90_91>separate</g90_91>
+    <!-- Server assumes ramge 0..255 for heater power reported in @ - sets multiplier if firmware has a lower range. -->
+    <temperatureOutputMultiplier>2</temperatureOutputMultiplier>
+    <!-- Special case for RepRapFirmware. Value 1 means each extruder has a T: and the order defines whcih extruder it matches. -->
+    <temperatureFormat>1</temperatureFormat>
+    <!-- Defines how firmware handles busy messages. "strict" means ALL commands even known slow commands will
+     send busy messages. "relaxed" means some slow commands might not send busy. -->
+    <busyHandling>relaxed</busyHandling>
+    <supportNamedStringParams>yes</supportNamedStringParams>
+    <!-- These gcodes are known to take longer. When no busy support is detected or busy mode is relaxed
+    these will not trigger a timeout for a long time. -->
+    <blockingCommands>
+        <command>M109</command>
+        <command>M190</command>
+        <command>M116</command>
+        <command>M303</command>
+        <command>M400</command>
+        <command>M226</command>
+        <command>M600</command>
+        <command>M0</command>
+        <command>M1</command>
+        <command>M48</command>
+        <command>M98</command> <!-- Call macro -->
+        <command>M300</command>
+        <command>M862</command>
+        <command>M863</command>
+        <command>M997</command> <!-- Firmware upload -->
+        <command>G4</command>
+        <command>G28</command>
+        <command>G29</command>
+        <command>G32</command>
+        <command>G30</command>
+        <command>G33</command>
+    </blockingCommands>
+    <!-- Normally, the repetier-server tracks the position by the commands that get send.
+    But some commands change the position to an unknown position. Often these report
+    the position, so we can read and use them, except we had already sent move commands since
+    sending a position response. These instructions help to decide if we can trust a position report
+    or if we have to assume that it is already invalidated.
+    In <motionCommand the positionReport defines how positions are reported by firmware. Possible values:
+    relative - identical to values used in G0-G3 including G92 offsets.
+    absolute - excluding G92 offsets
+
+    The <command> tags contain the motion command that if contained, mark it as motion. With attribute
+     reportPosition, you can define if a report happens. The Default value is no. Possible values:
+    no - No report expected
+    yes - Always reports
+    force - Append "reportPosition" gcodes to be sure we get a position that is copied.
+    ask - Send M114 afterward to ensure it is queried in case that firmware version does not report position.
+    -->
+    <motionCommands positonReport="relative">
+        <command>G0</command>
+        <command>G1</command>
+        <command>G2</command>
+        <command>G3</command>
+        <command reportPosition="force">G28</command>
+        <command reportPosition="force">G29</command>
+        <command reportPosition="force">G30</command>
+        <command reportPosition="force">G32</command>
+        <command reportPosition="yes" move="no">M114</command>
+        <command reportPosition="yes" move="no">M408</command>
+        <command reportPosition="force">T0</command>
+        <command reportPosition="force">T1</command>
+        <command reportPosition="force">T2</command>
+        <command reportPosition="force">T3</command>
+        <command reportPosition="force">T4</command>
+        <command reportPosition="force">T5</command>
+        <command reportPosition="force">T6</command>
+        <command reportPosition="force">T7</command>
+        <command reportPosition="force">T8</command>
+        <command reportPosition="force">T9</command>
+        <command reportPosition="force">T10</command>
+        <command reportPosition="force">T11</command>
+        <command reportPosition="force">T12</command>
+        <command reportPosition="force">T13</command>
+        <command reportPosition="force">T14</command>
+        <command reportPosition="force">T15</command>
+        <command reportPosition="force">T16</command>
+        <command reportPosition="force">T17</command>
+        <command reportPosition="force">T18</command>
+        <command reportPosition="force">T19</command>
+        <command reportPosition="force">T20</command>
+        <command reportPosition="force">T21</command>
+        <command reportPosition="force">T22</command>
+        <command reportPosition="force">T23</command>
+        <command reportPosition="force">T24</command>
+        <command reportPosition="force">T25</command>
+        <command reportPosition="force">T26</command>
+        <command reportPosition="force">T27</command>
+        <command reportPosition="force">T28</command>
+        <command reportPosition="force">T29</command>
+        <command reportPosition="force">T30</command>
+        <command reportPosition="force">T31</command>
+    </motionCommands>
+    <!-- These gcodes are expected to have a text parameter as last parameter -->
+    <gcodeWithText>
+        <m>20</m>
+        <m>23</m>
+        <m>28</m>
+        <m>29</m>
+        <m>32</m>
+        <m>30</m>
+        <m>36</m>
+        <m>117</m>
+        <m>118</m>
+        <m>3117</m>
+        <m>531</m>
+    </gcodeWithText>
+    <!-- Priority commands are always put in front of commands to be sent.
+    If the <command> tag has the emergency="true" flag, it will also be sent
+    when the regular buffer is full using the reserved buffer for emergency command.
+    At least if emergency support was reported from firmware.
+    -->
+    <priorityCommands allowOverflowBuffer="true">
+        <command emergency="true">M112</command>
+        <command emergency="true">M108</command>
+        <command emergency="true">M292</command>
+        <command emergency="true">@usbreset</command>
+        <command emergency="true">@debugcon</command>
+        <command emergency="true">@fakeok</command>
+    </priorityCommands>
+    <!-- Inside the server we use a lot of commands, and we do not always assume they
+    are the same for all firmwares. In that case, we define them here with the <command> tag.
+    type="..." is the predefined name for the action. When these are added, all parameters get
+    a name dependent on the command. You can include the parameter as integer {i:name}
+    or as float value {f:name}. If you need several gcodes for the execution, split them using newline.
+    -->
+    <command type="setFlowMultiply">M221 S{i:flowPercent}</command>
+    <command type="setSpeedMultiply">M220 S{i:speedPercent}</command>
+    <!-- <command type="requestTemperature">M105</command>-->
+    <command type="requestTemperature">M408 S2</command>
+    <command type="disableFan">M106 P{i:fanId} S0</command>
+    <command type="setFanSpeed">M106 P{i:fanId} S{i:fanSpeed}</command>
+    <command type="motorsOff">M18</command>
+    <command type="setBedTemperature">M140 S{f:temperature}</command>
+    <command type="setChamberTemperature">M141 S{f:temperature}</command>
+    <command type="setChamberTemperatureWait">M191 S{f:temperature}</command>
+    <command type="setBedTemperatureWait">M190 S{f:temperature}</command>
+    <command type="setExtruderTemperature">M104 S{f:temperature} T{i:extruder}</command>
+    <command type="setExtruderTemperatureWait">M109 S{f:temperature} T{i:extruder}</command>
+    <command type="unblock">M999</command>
+    <command type="emergencyStop">M112</command>
+    <command type="reportPosition">M408 S2
+        ;@syncMotion</command>
+    <command type="askPosition">M408 S2</command>
+    <command type="babystepZ">M290 S{f:babyz}</command>
+    <command type="waitEndOfMoves">M400</command>
+    <command type="continueFatalStop">M999
+        M110 N1
+    </command>
+    <command type="resetLineNumber">M110 N1</command>
+    <command type="startPrint">M530 S1 L{i:numLayer}
+        M531 {s:filename}
+        M532 X0 L0
+    </command>
+    <command type="stopPrint">M530 S0</command>
+    <command type="sendProgress">M532 X{f:progress} L{i:currentLayer}</command>
+    <command type="startAutoreportTemps">M155 S1</command>
+    <command type="hostRescueQuery">M415</command>
+    <command type="hostRescueStart">M415 S1</command>
+    <command type="hostRescueStop">M415 S0</command>
+    <command type="hostRescueSetZ">M415 Z{f:rescueZ}</command>
+    <command type="testConnectionSmall">M114</command>
+    <command type="testConnectionLong">M114 P0 X45.374 Y78.233 E0.0234</command>
+    <command type="testConnectionSlow">G4 P50</command>
+    <command type="caseLightsOn">M98 P"0:/macros/LightOn.g"</command>
+    <command type="caseLightsOff">M98 P"0:/macros/LightOff.g"</command>
+    <command type="homeAll">G28</command>
+    <command type="homeX">G28 X0</command>
+    <command type="homeY">G28 Y0</command>
+    <command type="homeZ">G28 Z0</command>
+    <command type="autolevel">G28
+G29 S0</command>
+    <command type="powerOff">M81</command>
+    <command type="powerOn">M80</command>
+    <command type="sendMessage">M117 {s:message}</command>
+    <command type="recoverBadCondition">@kill
+        M999</command>
+    <command type="quickComTest">M220</command> <!-- sends as dummy command to force getting an extra ok without delay -->
+
+    <!-- Every firmware has its own format when it sends some messages. To detect them
+    these are defined in <response> tags and the type=".." attribute defines the meaning of the
+    response. When a response is supposed to deliver a value that value must be
+    merged as first group in the regular expression. If the value needs to be scaled to the
+    expected range you can use the factor="1" attribute. All values are float values by default.
+    If a value is a string add the string="true" attribute. If there is no value, but you need
+    to return a value provide it in the "value="1" attribute.
+    If response expects multiple values the names of the group order are given as v1="name1",
+    v2="name",...
+
+    Parsing all responses is time-consuming. Therefore, we stop at the first match and
+    run tests in order of appearance, so order matters. If multiple matches are
+    possible put the attribute last="false" in it and place it BEFORE the
+    response without it.
+    -->
+    <response type="verifiedConnection" value="1" last="false">^ok|wait$|^(echo:)?busy:</response>
+    <response type="ok" value="-1">^ok\s*N?(\d*+)?</response>
+    <response type="emptyQueue" value="1">^wait$</response>
+    <response type="resetTimeout">^(echo:)?busy:</response>
+    <response type="resend">^[Rr]esend:\s*(\d+)$</response>
+    <response type="resend">^rs:\s*(\d+)$</response>
+<!--    <response type="potentialOk" value="-1">^[^o]?k\s?N?(\d*+)?</response>-->
+    <response type="unknownCommand" string="true">unsupported command:.*([MG]\d+)$</response>
+    <response type="unknownCommand" string="true">invalid G Code:.*([MG]\d+)$</response>
+    <response type="reset" value="1">^start$</response>
+    <response type="repRapFirmwareJson">^{.*}$</response>
+    <response type="firmwareUrl" string="true" last="false">FIRMWARE_URL:\s*([^\s]+)</response>
+    <response type="firmwareName" string="true" last="false">FIRMWARE_NAME:\s*([^\s]+)</response>
+    <response type="protocolVersion" string="true" last="false">PROTOCOL_VERSION:\s*([^\s]+)</response>
+    <response type="machineType" string="true" last="false">MACHINE_TYPE:\s*([^\s]+)</response>
+    <response type="extruderCountSend" last="false">EXTRUDER_COUNT:\s*(\d+)</response>
+    <response type="sdMounted" value="0">^SD card removed$</response>
+    <response type="sdMounted" value="1">^SD card inserted$</response>
+    <response type="sdPrintStopped" value="1">^SD print stopped by user.$</response>
+    <response type="conditionIgnoring">M999 to restart</response>
+    <response type="halted">^Error:Printer halted</response>
+    <response type="halted">^!!</response>
+    <response type="outOfFilamentPause" string="true">^Filament error on extruder (\d+):\s*noFilament</response>
+    <response type="requestPause" string="true">//\s*action:pause\b\s*(.*)</response>
+    <response type="continuePause">//\s*action:resume\b</response>
+    <response type="stopPrint">//\s*action:cancel\b</response>
+    <response type="disablePrinter">//\s*action:disconnect\b</response>
+    <response type="requestPause" string="true">RequestPause:(.*)</response>
+    <response type="continuePause">RequestContinue:</response>
+    <response type="requestPauseNoScript" string="true">//\s*action:paused\b\s*(.*)</response>
+    <response type="continuePauseNoScript" string="true">//\s*action:resumed\b\s*(.*)</response>
+    <response type="disablePrinter">//\s*action:disconnect</response>
+    <response type="activeExtruder">^echo:Active Extruder:\s*(\d+)</response>
+    <response type="conditionIgnoring">(.*M999\b)</response>
+    <response type="progressView" value="1">^Cap:PROGRESS</response>
+    <response type="autoreportTempSupported">^Cap:AUTOREPORT_TEMP:(\d)</response>
+    <response type="zprobeSupported">^Cap:Z_PROBE:(\d)</response>
+    <response type="autolevelSupported">^Cap:AUTOLEVEL:(\d)</response>
+    <response type="eepromSupported">^Cap:EEPROM:(\d)</response>
+    <response type="toggleLightsSupported">^Cap:TOGGLE_LIGHTS:(\d)</response>
+    <response type="emergencyParser">^Cap:EMERGENCY_PARSER:(\d)</response>
+    <response type="hostRescue">^Cap:HOST_RESCUE:(\d)</response>
+    <response type="runScript" string="true">//\s*run_script:(.*)</response>
+    <response type="sendPassword">^Please enter your password:</response>
+    <response type="sendPassword">^Invalid password</response>
+    <response type="doorOpened">DoorOpened$</response>
+    <response type="doorClosed">DoorClosed$</response>
+
+    <!-- unsupported responses
+    <response type="repetierVersion">REPETIER_PROTOCOL:(\d+)</response>
+    <response type="emptyQueue" value="1">^wait$</response>
+    <response type="flowMultiplier" factor="1">FlowMultiply:(\d+)</response>
+    <response type="speedMultiplier" factor="1">SpeedMultiply:(\d+)</response>
+    <response type="repEeprom" string="true" v1="type" v2="pos" v3="value" v4="text">EPR:\s*(\d+)\s+(\d+)\s+(\d+\.*\d*)\s+(.*)$</response>
+    <response type="fanSpeed" factor="1">Fanspeed:(\d+)</response>
+    -->
+
+    <!-- T:22.92 /0 B:22.78 /0 B@:0 @:0 T0:22.92 /0 @0:0 T1:24.86 /0 @1:0 -->
+    <!-- When we query settings from printer we send these values to detect them. -->
+    <getSettings>M115
+        M27
+        M106 S20
+        M107
+        M105
+        M503
+        M208
+        M203
+        M201
+        M566
+        M205
+        M408 S1
+        M408 S2
+        M408 S3
+        M408 S5
+        #version
+    </getSettings>
+    <!-- For every setting we want to query there is a <setting> tag.
+    The type=".." tells the required name and the tag content is the regular expression
+    to detect and extract the value form the first matched group. Preset values can be
+    given with value="1" attribute. If the matched value need a value added use
+    valueAdd="1" attribute. Useful when index starts with 0 and 1 is expected for example.
+    factor="1" scales the resulting value.
+    Some responses are for a special part e.g. second extruder. In that case provide inside
+     the index=".." attribute a regular expression where first group is the index value.
+     With indexAdd="1" attribute you can modify the index to expected offset.
+    -->
+    <setting type="firmwareCommunicationWorking" value="1">RepRapFirmware</setting>
+    <setting type="differentFirmware" string="Repetier-Firmware">REPETIER_PROTOCOL</setting>
+    <setting type="differentFirmware" string="Marlin">FIRMWARE_NAME:Marlin</setting>
+    <setting type="differentFirmware" string="Smoothieware">System Clock:</setting>
+    <setting type="differentFirmware" string="Chitu (CBD/ZWLF)">CBD make it</setting>
+    <setting type="differentFirmware" string="Klipper">FIRMWARE_NAME:Klipper</setting>
+    <setting type="differentFirmware" string="MK4duo">FIRMWARE_NAME:\s*MK4duo</setting>
+
+    <setting type="xPrintAcceleration">M201 .*X(\d+\.?\d*)</setting>
+    <setting type="yPrintAcceleration">M201 .*Y(\d+\.?\d*)</setting>
+    <setting type="zPrintAcceleration">M201 .*Z(\d+\.?\d*)</setting>
+    <setting type="xTravelAcceleration">M201 .*X(\d+\.?\d*)</setting>
+    <setting type="yTravelAcceleration">M201 .*Y(\d+\.?\d*)</setting>
+    <setting type="zTravelAcceleration">M201 .*Z(\d+\.?\d*)</setting>
+    <!-- M201 response: V1.19: Accelerations: X: 500.0, Y: 500.0, Z: 20.0, E: 250.0
+    V3.1.1_ Accelerations (mm/sec^2): X: 500.0, Y: 500.0, Z: 20.0, E: 250.0
+    -->
+    <setting type="xPrintAcceleration">Accelerations.*X:\s*(\d+\.?\d*)</setting>
+    <setting type="yPrintAcceleration">Accelerations.*Y:\s*(\d+\.?\d*)</setting>
+    <setting type="zPrintAcceleration">Accelerations.*Z:\s*(\d+\.?\d*)</setting>
+    <setting type="xTravelAcceleration">Accelerations.*X:\s*(\d+\.?\d*)</setting>
+    <setting type="yTravelAcceleration">Accelerations.*Y:\s*(\d+\.?\d*)</setting>
+    <setting type="zTravelAcceleration">Accelerations.*Z:\s*(\d+\.?\d*)</setting>
+    <setting type="extrAcceleration">Accelerations.*E:\s*(\d+\.?\d*)</setting>
+
+    <setting type="maxXSpeed" factor="0.01666667">M203 .*X(\d+\.?\d*)</setting>
+    <setting type="maxYSpeed" factor="0.01666667">M203 .*Y(\d+\.?\d*)</setting>
+    <setting type="maxZSpeed" factor="0.01666667">M203 .*Z(\d+\.?\d*)</setting>
+    <setting type="extrMaxSpeed" factor="0.01666667">M203 .*E(\d+\.?\d*)</setting>
+    <!-- M203 response: Maximum feedrates: X: 6000.0, Y: 6000.0, Z: 1800.0, E: 1200.0 -->
+    <setting type="maxXSpeed" factor="0.01666667">Maximum feedrates:.*X:\s*(\d+\.?\d*)</setting>
+    <setting type="maxYSpeed" factor="0.01666667">Maximum feedrates:.*Y:\s*(\d+\.?\d*)</setting>
+    <setting type="maxZSpeed" factor="0.01666667">Maximum feedrates:.*Z:\s*(\d+\.?\d*)</setting>
+    <setting type="maxXSpeed">Max speeds \(mm\/sec\):.*X:\s*(\d+\.?\d*)</setting>
+    <setting type="maxYSpeed">Max speeds \(mm\/sec\):.*Y:\s*(\d+\.?\d*)</setting>
+    <setting type="maxZSpeed">Max speeds \(mm\/sec\):.*Z:\s*(\d+\.?\d*)</setting>
+    <setting type="extrMaxSpeed" factor="0.01666667">Maximum feedrates:.*E:\s*(\d+\.?\d*)</setting>
+    <!-- Max speeds (mm/min)): X: 6000.0, Y: 6000.0, Z: 180.0, E: 1200.0, min. speed 30.00 -->
+    <setting type="extrMaxSpeed" factor="0.01666667">Max speeds \(mm\/min\)\)?:.*E:\s*(\d+\.?\d*)</setting>
+    <!-- M566 response: Maximum jerk rates: X: 900.0, Y: 900.0, Z: 60.0, E: 120.0 -->
+    <setting type="xyJerk" factor="0.01666667">Maximum jerk rates:.*X:\s*(\d+\.?\d*)</setting>
+    <setting type="zJerk" factor="0.01666667">Maximum jerk rates:.*Z:\s*(\d+\.?\d*)</setting>
+    <setting type="extrJerk" factor="0.01666667">Maximum jerk rates:.*E:\s*(\d+\.?\d*)</setting>
+    <setting type="xyJerk" factor="0.01666667">Maximum jerk rates \(mm\/min\):.*X:\s*(\d+\.?\d*)</setting>
+    <setting type="zJerk" factor="0.01666667">Maximum jerk rates \(mm\/min\):.*Z:\s*(\d+\.?\d*)</setting>
+    <setting type="extrJerk" factor="0.01666667">Maximum jerk rates (mm/min):.*E:\s*(\d+\.?\d*)</setting>
+    <setting type="xyJerk">Maximum jerk rates \(mm\/sec\):.*X:\s*(\d+\.?\d*)</setting>
+    <setting type="zJerk">Maximum jerk rates \(mm\/sec\):.*Z:\s*(\d+\.?\d*)</setting>
+    <setting type="extrJerk">Maximum jerk rates \(mm\/sec\):.*E:\s*(\d+\.?\d*)</setting>
+    <setting type="XStepsPerMM">M92 X(\d+\.?\d*)</setting>
+    <setting type="YStepsPerMM">M92 Y(\d+\.?\d*)</setting>
+    <setting type="ZStepsPerMM">M92 Z(\d+\.?\d*)</setting>
+    <setting type="extrStepsPerMM">M92 E(\d+\.?\d*)</setting>
+    <setting type="hasHeatedBed" value="0">FIRMWARE_NAME</setting>
+    <setting type="hasHeatedBed" value="1">B:-?\d+.?\d*</setting>
+    <setting type="hasHeatedBed" value="1">M140 .*H</setting>
+    <setting type="extruderCountSend">EXTRUDER_COUNT:\s*(\d+)</setting>
+    <setting type="KeepAliveInterval" factor="1000" valueAdd="1000">^echo:M113 S([+-]?\d+\.?\d*)</setting>
+    <!-- M208 response: V1.19: Axis limits - X: 0.0 min, 230.0 max, Y: 0.0 min, 210.0 max, Z: 0.0 min, 200.0 max
+    V3.1.1: Axis limits X0.0:230.0, Y0.0:210.0, Z0.0:200.0
+    -->
+    <setting type="XMin">Axis limits.*X:\s*(-?[\d\.]*) min</setting>
+    <setting type="YMin">Axis limits.*Y:\s*(-?[\d\.]*) min</setting>
+    <setting type="ZMin">Axis limits.*Z:\s*(-?[\d\.]*) min</setting>
+    <setting type="XMax">Axis limits.*X:\s*-?[\d\.]* min,\s*(-?[\d\.]*) max</setting>
+    <setting type="YMax">Axis limits.*Y:\s*-?[\d\.]* min,\s*(-?[\d\.]*) max</setting>
+    <setting type="ZMax">Axis limits.*Z:\s*-?[\d\.]* min,\s*(-?[\d\.]*) max</setting>
+    <setting type="BedXMin">Axis limits.*X:\s*(-?[\d\.]*) min</setting>
+    <setting type="BedYMin">Axis limits.*Y:\s*(-?[\d\.]*) min</setting>
+    <setting type="BedXMax">Axis limits.*X:\s*-?[\d\.]* min,\s*(-?[\d\.]*) max</setting>
+    <setting type="BedYMax">Axis limits.*Y:\s*-?[\d\.]* min,\s*(-?[\d\.]*) max</setting>
+
+    <setting type="XMin">Axis limits.*X\s*(-?[\d\.]*):</setting>
+    <setting type="YMin">Axis limits.*Y\s*(-?[\d\.]*):</setting>
+    <setting type="ZMin">Axis limits.*Z\s*(-?[\d\.]*):</setting>
+    <setting type="XMax">Axis limits.*X\s*-?[\d\.]*:(-?[\d\.]*)</setting>
+    <setting type="YMax">Axis limits.*Y\s*-?[\d\.]*:(-?[\d\.]*)</setting>
+    <setting type="ZMax">Axis limits.*Z\s*-?[\d\.]*:(-?[\d\.]*)</setting>
+    <setting type="BedXMin">Axis limits.*X\s*(-?[\d\.]*):</setting>
+    <setting type="BedYMin">Axis limits.*Y\s*(-?[\d\.]*):</setting>
+    <setting type="BedXMax">Axis limits.*X\s*-?[\d\.]*:(-?[\d\.]*)</setting>
+    <setting type="BedYMax">Axis limits.*Y\s*-?[\d\.]*:(-?[\d\.]*)</setting>
+    <setting type="printableRadius">Axis limits.*X\s*-?[\d\.]*:(-?[\d\.]*)</setting>
+    <!-- M665 R105.6 L215.0 B85 H235 ; set delta radius, diagonal rod length, printable radius and homed height -->
+    <setting type="printableRadius">M665.*B(-?[\d\.]*)</setting>
+    <setting type="ZHomePos">M665.*H(-?[\d\.]*)</setting>
+    <setting type="printerType" value="1">^{.*"geometry":"cartesian"</setting>
+    <setting type="printerType" value="1">^{.*"geometry":"core</setting>
+    <setting type="printerType" value="2">^{.*"geometry":"delta"</setting>
+    <setting type="extruderCountSend">^{.*"numTools":(\d+)</setting>
+    <setting type="hasHeatedChamber" value="0">FIRMWARE_NAME</setting>
+    <setting type="hasHeatedChamber" value="1">^{.*"chamber"</setting>
+    <setting type="fansInstalled">^{.*"fans":(\d+)</setting>
+    <setting type="fansInstalled">^{.*"controllableFans":(\d+)</setting>
+    <!-- Some commands change firmware behaviour that is important for timing computations.
+    These are detected with the <paramChange> rules. name=".." attribute defines the modified parameter
+    and code is the gcode that changes it for quick detection. The contained regular expression
+    returns in the first group the value for the parameter changed. The scale="1" factor can scale the
+    factor if needed.
+    -->
+    <paramChange name="accelPrintX" code="M201">M201.*X([+-]?\d+\.?\d*)</paramChange>
+    <paramChange name="accelPrintY" code="M201">M201.*Y([+-]?\d+\.?\d*)</paramChange>
+    <paramChange name="accelPrintZ" code="M201">M201.*Z([+-]?\d+\.?\d*)</paramChange>
+    <paramChange name="accelPrintE" code="M201">M201.*E([+-]?\d+\.?\d*)</paramChange>
+    <paramChange name="accelTravelX" code="M201">M201.*X([+-]?\d+\.?\d*)</paramChange>
+    <paramChange name="accelTravelY" code="M201">M201.*Y([+-]?\d+\.?\d*)</paramChange>
+    <paramChange name="accelTravelZ" code="M201">M201.*Z([+-]?\d+\.?\d*)</paramChange>
+    <paramChange name="maxFeedrateX" code="M203" scale="0.016666666666666667">M203.*X([+-]?\d+\.?\d*)</paramChange>
+    <paramChange name="maxFeedrateY" code="M203" scale="0.016666666666666667">M203.*Y([+-]?\d+\.?\d*)</paramChange>
+    <paramChange name="maxFeedrateZ" code="M203" scale="0.016666666666666667">M203.*Z([+-]?\d+\.?\d*)</paramChange>
+    <paramChange name="maxFeedrateE" code="M203" scale="0.016666666666666667">M203.*E([+-]?\d+\.?\d*)</paramChange>
+    <paramChange name="accelPrint" code="M204">M204.*P([+-]?\d+\.?\d*)</paramChange>
+    <paramChange name="accelTravel" code="M204">M204.*T([+-]?\d+\.?\d*)</paramChange>
+    <paramChange name="accelExtrude" code="M204">M204.*P([+-]?\d+\.?\d*)</paramChange>
+    <recover>
+        <!-- Recover replays print but only executes the commands below. Temperature wait commands can be replaced
+        by the non-waiting equivalent. Server will wait before the first move until the last set temperatures are
+        reached. It will also activate the correct extruder before continue. -->
+        <execute code="G20"></execute>
+        <execute code="G21"></execute>
+        <execute code="G90"></execute>
+        <execute code="G91"></execute>
+
+        <execute code="M82"></execute>
+        <execute code="M83"></execute>
+        <execute code="M85"></execute>
+        <execute code="M92"></execute>
+        <execute code="M104"></execute>
+        <execute code="M106"></execute>
+        <execute code="M107"></execute>
+        <execute code="M109" replace="M104"></execute>
+        <execute code="M140"></execute>
+        <execute code="M141"></execute>
+        <execute code="M163"></execute>
+        <execute code="M190" replace="M140"></execute>
+        <execute code="M191" replace="M141"></execute>
+        <execute code="M200"></execute>
+        <execute code="M201"></execute>
+        <execute code="M202"></execute>
+        <execute code="M203"></execute>
+        <execute code="M204"></execute>
+        <execute code="M280"></execute>
+        <execute code="M221"></execute>
+        <execute code="M220"></execute>
+        <execute code="M900"></execute>
+    </recover>
+</firmware>

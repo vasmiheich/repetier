@@ -1,0 +1,65 @@
+<wizardCommand author="Repetier" description="A wizard that helps you leveling your bed by driving to specific locations" icon="&lt;svg version=&quot;1.1&quot; viewBox=&quot;-10 0 1011 1000&quot;&gt;&#xA;   &lt;path fill=&quot;currentColor&quot; d=&quot;M494.27 425.45c41.6104 33.8623 68.2715 54.5059 88.3301 102.375c24.0908 57.4873 18.9805 92.1377 18.25 155.138l-116.069 -0.788086c0.729492 -44.0996 8.93066 -57.5654 -6.57031 -96.8623c-14.5996 -37.0127 -32.8496 -49.6123 -60.5898 -77.9629zM2.91016 800.85&#xA;l713.939 -787.5l81.7607 85.0508l-534.36 581.175h726.05v121.274h-987.39z&quot;&gt;&lt;/path&gt;&#xA;&lt;/svg&gt;" name="Manual Bed Leveling" source="0" uuid="570fc980-eea1-4405-848b-452dd4df13cf" version="1" visibleWhenPrinting="0">@func MBLDriveTo x y
+    G1 Z{{fixed(min(perm.manBedLevZhop + perm.manBedLevZoffset, config.move_z_max),3)}} F{{fixed(config.speed_z_per_minute,0)}}
+    G1 X{{fixed(local.x,2)}} Y{{fixed(local.y,2)}} F{{fixed(config.speed_xy_per_minute,0)}}
+    G1 Z{{fixed(perm.manBedLevZoffset,3)}}  F{{fixed(config.speed_z_per_minute,0)}}
+    @call MBLCartesian
+@endfunc
+
+@func MBLDriveToDelta angle dist
+    G1 Z{{fixed(min(perm.manBedLevZhop + perm.manBedLevZoffset, config.move_z_max),3)}} F{{fixed(config.speed_z_per_minute,0)}}
+    G1 X{{fixed(local.dist*cos(to_rad(local.angle)),2)}} Y{{fixed(local.dist*sin(to_rad(local.angle)),2)}} F{{fixed(config.speed_xy_per_minute,0)}}
+    G1 Z{{fixed(local.manBedLevZoffset,3)}}  F{{fixed(config.speed_z_per_minute,0)}}
+    @call MBLDelta
+@endfunc
+
+@func MBLStart
+    G28
+    @if {{config.bed_shape == &quot;circle&quot;}}
+        @call MBLDelta
+    @else
+        @call MBLCartesian
+    @endif
+@endfunc
+
+@func MBLCartesian
+    @set local.middleX {{(config.bed_x_min + config.bed_x_max) / 2}}
+    @set local.middleY {{(config.bed_y_min + config.bed_y_max) / 2}}
+    @dialogStart &quot;Offset x and y are the distances of the points to the bed border. If you measure with a piece of paper, you should level for z height 0. If you have a block of known height that you push between bed and nozzle, enter the object height instead. With z hop printer raises head when traveling between the points.&quot; &quot;Manual Bed Leveling&quot;
+        @dialogIcon '&lt;svg version=&quot;1.1&quot; viewBox=&quot;-10 0 1011 1000&quot;&gt;   &lt;path fill=&quot;currentColor&quot; d=&quot;M494.27 425.45c41.6104 33.8623 68.2715 54.5059 88.3301 102.375c24.0908 57.4873 18.9805 92.1377 18.25 155.138l-116.069 -0.788086c0.729492 -44.0996 8.93066 -57.5654 -6.57031 -96.8623c-14.5996 -37.0127 -32.8496 -49.6123 -60.5898 -77.9629zM2.91016 800.85l713.939 -787.5l81.7607 85.0508l-534.36 581.175h726.05v121.274h-987.39z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;'
+        @dialogInputDouble &quot;Offset X [mm]&quot; perm.manBedLevXoffset default({{get(&quot;perm&quot;,&quot;manBedLevXoffset&quot;,&quot;20&quot;)}}) min(0) max({{local.middleX}})
+        @dialogInputDouble &quot;Offset Y [mm]&quot; perm.manBedLevYoffset default({{get(&quot;perm&quot;,&quot;manBedLevYoffset&quot;,&quot;20&quot;)}}) min(0) max({{local.middleY}})
+        @dialogInputDouble &quot;Measure Z at [mm]&quot; perm.manBedLevZoffset default({{get(&quot;perm&quot;,&quot;manBedLevZoffset&quot;,&quot;0&quot;)}}) min(0) max({{config.move_z_max}})
+        @dialogInputDouble &quot;Z Hop [mm]&quot; perm.manBedLevZhop default({{get(&quot;perm&quot;,&quot;manBedLevZhop&quot;,&quot;5&quot;)}}) min(0) max({{config.move_z_max}})
+        @dialogButton &quot;Top-Left&quot; &quot;@call MBLDriveTo {{config.bed_x_min + perm.manBedLevXoffset}} {{config.bed_y_max - perm.manBedLevYoffset}}&quot;
+        @dialogButton &quot;Top-Right&quot; &quot;@call MBLDriveTo {{config.bed_x_max - perm.manBedLevXoffset}} {{config.bed_y_max - perm.manBedLevYoffset}}&quot;
+        @dialogButton &quot;Center&quot; &quot;@call MBLDriveTo {{(config.bed_x_min + config.bed_x_max) / 2}} {{(config.bed_y_min + config.bed_y_max) / 2}}&quot;
+        @dialogButton &quot;Bottom-Left&quot; &quot;@call MBLDriveTo {{config.bed_x_min + perm.manBedLevXoffset}} {{config.bed_y_min + perm.manBedLevYoffset}}&quot;
+        @dialogButton &quot;Bottom-Right&quot; &quot;@call MBLDriveTo {{config.bed_x_max - perm.manBedLevXoffset}} {{config.bed_y_min + perm.manBedLevYoffset}}&quot;
+        @dialogButton &quot;Finished&quot;
+    @dialogShow
+@endfunc
+
+@func MBLDelta
+    @dialogStart &quot;Offset is the distance of the points to the bed border. If you measure with a piece of paper, you should level for z height 0. If you have a block of known height that you push between bed and nozzle, enter the object height instead. With z hop printer raises head when traveling between the points.&quot; &quot;Manual Bed Leveling&quot;
+        @dialogIcon '&lt;svg version=&quot;1.1&quot; viewBox=&quot;-10 0 1011 1000&quot;&gt;   &lt;path fill=&quot;currentColor&quot; d=&quot;M494.27 425.45c41.6104 33.8623 68.2715 54.5059 88.3301 102.375c24.0908 57.4873 18.9805 92.1377 18.25 155.138l-116.069 -0.788086c0.729492 -44.0996 8.93066 -57.5654 -6.57031 -96.8623c-14.5996 -37.0127 -32.8496 -49.6123 -60.5898 -77.9629zM2.91016 800.85l713.939 -787.5l81.7607 85.0508l-534.36 581.175h726.05v121.274h-987.39z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;'
+        @dialogInputDouble &quot;Offset [mm]&quot; perm.manBedLevXoffset default({{get(&quot;perm&quot;,&quot;manBedLevOffset&quot;,&quot;20&quot;)}}) min(0) max({{config.bed_radius / 2}})
+        @dialogInputDouble &quot;Measure Z at [mm]&quot; perm.manBedLevZoffset default({{get(&quot;perm&quot;,&quot;manBedLevZoffset&quot;,&quot;0&quot;)}}) min(0) max({{config.move_z_max}})
+        @dialogInputDouble &quot;Z Hop [mm]&quot; perm.manBedLevZhop default({{get(&quot;perm&quot;,&quot;manBedLevZhop&quot;,&quot;5&quot;)}}) min(0) max({{config.move_z_max}})
+        @dialogButton &quot;Tower A&quot; &quot;@call MBLDriveToDelta 210 {{config.bed_radius - perm.manBedLevOffset}}&quot;
+        @dialogButton &quot;Tower B&quot; &quot;@call MBLDriveToDelta 330 {{config.bed_radius - perm.manBedLevOffset}}&quot;
+        @dialogButton &quot;Tower C&quot; &quot;@call MBLDriveToDelta 90 {{config.bed_radius - perm.manBedLevOffset}}&quot;
+        @dialogButton &quot;Center&quot; &quot;@call MBLDriveToDelta 0 0&quot;
+        @dialogButton &quot;Finished&quot;
+    @dialogShow
+@endfunc
+
+@if {{job.running}}
+    @error &quot;Manual bed leveling during print not possible!&quot;
+@else
+    @dialogStart &quot;This wizard is meant for manual bed leveling. It will offer buttons to quickly move to the edges and center. At first it will home, so please make sure bed is free of obstacles.&quot; &quot;Manual Bed Leveling&quot;
+    @dialogIcon '&lt;svg version=&quot;1.1&quot; viewBox=&quot;-10 0 1011 1000&quot;&gt;   &lt;path fill=&quot;currentColor&quot; d=&quot;M494.27 425.45c41.6104 33.8623 68.2715 54.5059 88.3301 102.375c24.0908 57.4873 18.9805 92.1377 18.25 155.138l-116.069 -0.788086c0.729492 -44.0996 8.93066 -57.5654 -6.57031 -96.8623c-14.5996 -37.0127 -32.8496 -49.6123 -60.5898 -77.9629zM2.91016 800.85l713.939 -787.5l81.7607 85.0508l-534.36 581.175h726.05v121.274h-987.39z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;'
+    @dialogButton &quot;Bed cleared - Start&quot; &quot;@call MBLStart&quot;
+    @dialogButton &quot;Cancel&quot;
+    @dialogShow
+@endif
+</wizardCommand>

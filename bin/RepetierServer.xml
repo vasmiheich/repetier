@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<server>
+    <installation-directory>..</installation-directory>
+    <storage-directory>C:\ProgramData\Repetier-Server</storage-directory>
+    <default-language>en</default-language>
+    <port>3344</port>
+    <https-port>3345</https-port>
+    <disableIPV6>false</disableIPV6>
+    <!-- To prevent clickjacking we should disallow embedding in iframes -->
+    <allow-iframe-embedding>false</allow-iframe-embedding>
+    <logging>true</logging>
+    <backlog-size>1000</backlog-size>
+    <!-- how many files should be stored in the last printed files list -->
+    <last-printed-files store="10"/>
+    <max-log-files-per-printer>5</max-log-files-per-printer>
+    <update-info-url>http://download.repetier-server.com/files/server/windows/updateinfo.txt</update-info-url>
+    <printer-frontend-url>/modules/front2/www/app.html</printer-frontend-url>
+    <web-frontend-url>/</web-frontend-url>
+    <custom-ssl-certificate-store></custom-ssl-certificate-store><!--If you want to add your own SSL certificates, please enter here the directory where your certificate is stored. Note: only certificates with the extension .pem will be considered-->
+    <features>
+        <!-- ========= Control which config options appear in global settings for whom ========= -->
+
+        <!-- Terminal -->
+        <config-terminal>admin</config-terminal>
+        <!-- External Links -->
+        <config-external-links>configure</config-external-links>
+        <config-gui>configure,touch</config-gui>
+        <!-- GPIO Settings -->
+        <config-gpio>configure</config-gpio>
+        <!-- Import folders -->
+        <config-folders>configure</config-folders>
+        <!-- Connectivity -->
+        <config-connectivity>configure</config-connectivity>
+        <!-- MQTT-->
+        <config-mqtt>configure</config-mqtt>
+        <!-- Network -->
+        <config-network>configure,touch</config-network>
+        <!-- Preview Images -->
+        <config-preview-images>configure</config-preview-images>
+        <!-- PDF Print Reports -->
+        <config-print-reports>configure</config-print-reports>
+        <!-- Printing Costs -->
+        <config-printing-costs>configure</config-printing-costs>
+        <!-- Push Messages -->
+        <config-push-messages>configure</config-push-messages>
+        <!-- Timelapse Videos -->
+        <config-timelapse>configure</config-timelapse>
+        <!-- Web Actions -->
+        <config-web-actions>configure</config-web-actions>
+        <!-- Webserver -->
+        <config-webserver>configure</config-webserver>
+        <!-- Run autoupdate -->
+        <update-server>configure,touch</update-server>
+
+        <!-- ========= Available functions printer related ========= -->
+
+        <!-- EEPROM Editor -->
+        <printer-eeprom>configure,touch</printer-eeprom>>
+        <!-- Use firmware upload -->
+        <printer-firmwareUpload>configure</printer-firmwareUpload>
+        <!-- Change firmware upload settings -->
+        <printer-firmwareUpload-config>configure</printer-firmwareUpload-config>
+        <!-- Add new printer -->
+        <add-printer>configure</add-printer>
+        <!-- Delete existing printer -->
+        <del-printer>configure</del-printer>
+        <!-- See projects in menu top, no influence on projects operation if a link is known! -->
+        <projects>seeProjects</projects>
+        <!-- Make a backup from existing printer -->
+        <printer-backup>configure</printer-backup>
+        <!-- Restore a printer from Backup -->
+        <printer-restore>configure</printer-restore>
+        <!-- See and download made log files -->
+        <printer-logs>readFiles,configure</printer-logs>
+        <!-- enable/disable logging -->
+        <printer-configure-logs>configure</printer-configure-logs>
+        <!-- configure klipper scripts, install, uninstall, input shaper -->
+        <config-klipper>configure</config-klipper>
+        <!-- see klipper logs -->
+        <control-klipper>configure</control-klipper>
+        <!-- restart klipper service -->
+        <restart-klipper>configure</restart-klipper>
+        <!-- see wizard manager, import installable, add/del -->
+        <wizard-manager>configure</wizard-manager>
+        <!-- show console in ui, needs still print permission to send! -->
+        <show-console>print</show-console>
+        <!-- show quick commands in ui, needs still print permission to send! -->
+        <show-quick-commands>print</show-quick-commands>
+        <!-- show wizards in ui -->
+        <show-wizards>print</show-wizards>
+        <!-- show wizard microscope in ui -->
+        <show-wizard-microscope>print</show-wizard-microscope>
+
+        <!-- ========= Configuration settings ========= -->
+
+        <!-- Who can call config at all? Individual settings can be further detailed for easy configuration -->
+        <printer-configure>configure,touch</printer-configure>
+
+        <!-- which tabs should be visible -->
+        <printer-configure-general>configure</printer-configure-general>
+        <printer-configure-tools>configure</printer-configure-tools>
+        <printer-configure-shape>configure</printer-configure-shape>
+        <printer-configure-rescue>configure</printer-configure-rescue>
+        <printer-configure-webcam>configure</printer-configure-webcam>
+        <printer-configure-gcodes>configure</printer-configure-gcodes>
+
+        <!-- general accordions -->
+        <printer-configure-con>configure</printer-configure-con>
+        <!-- manual control -->
+        <printer-configure-mc>configure</printer-configure-mc>
+        <!-- print time calculation parameter -->
+        <printer-configure-ptc>configure</printer-configure-ptc>
+
+        <!-- Change manual control features like Software power, Leveling, Lights, Home -->
+        <printer-configure-tools-add-del>configure</printer-configure-tools-add-del>
+        <printer-configure-tools-general-extruder>configure</printer-configure-tools-general-extruder>
+        <printer-configure-tools-wizard>configure</printer-configure-tools-wizard>
+        <printer-configure-tools-alias>configure</printer-configure-tools-alias>
+        <printer-configure-tools-temp-offset>configure</printer-configure-tools-temp-offset>
+        <printer-configure-tools-heater-speed>configure</printer-configure-tools-heater-speed>
+        <printer-configure-tools-max-temp>configure</printer-configure-tools-max-temp>
+        <printer-configure-tools-set-precision>configure</printer-configure-tools-set-precision>
+        <printer-configure-tools-pos-offset>configure</printer-configure-tools-pos-offset>
+        <printer-configure-tools-presets>configure</printer-configure-tools-presets>
+        <printer-configure-tools-fil-diameter>configure</printer-configure-tools-fil-diameter>
+        <printer-configure-tools-nozzle-diameter>configure</printer-configure-tools-nozzle-diameter>
+        <printer-configure-tools-extrusion>configure,touch</printer-configure-tools-extrusion>
+        <printer-configure-tools-firmware>configure</printer-configure-tools-firmware>
+        <printer-configure-tools-units>configure</printer-configure-tools-units>
+        <printer-configure-tools-icon>configure</printer-configure-tools-icon>
+        <printer-configure-tools-fil-sensor>configure</printer-configure-tools-fil-sensor>
+        <printer-configure-tools-is-heater>configure</printer-configure-tools-is-heater>
+        <printer-configure-tools-fan-config>configure</printer-configure-tools-fan-config>
+
+        <printer-configure-shape-colors>configure</printer-configure-shape-colors>
+        <printer-configure-shape-dimensions>configure</printer-configure-shape-dimensions>
+        <printer-configure-shape-image>configure</printer-configure-shape-image>
+        <printer-configure-shape-grid>configure</printer-configure-shape-grid>
+        <printer-configure-shape-type>configure</printer-configure-shape-type>
+
+        <printer-configure-mc-features>configure</printer-configure-mc-features>
+        <printer-configure-mc-speeds>configure</printer-configure-mc-speeds>
+        <printer-configure-mc-homepos>configure</printer-configure-mc-homepos>
+        <!-- Select which home buttons appear in ui -->
+        <printer-configure-mc-show-homepos>configure</printer-configure-mc-show-homepos>
+        <printer-configure-mc-xy>configure</printer-configure-mc-xy>
+        <printer-configure-mc-z>configure</printer-configure-mc-z>
+        <printer-configure-mc-invert>configure</printer-configure-mc-invert>
+        <printer-configure-ptc-buffer>configure</printer-configure-ptc-buffer>
+        <printer-configure-ptc-jerk>configure</printer-configure-ptc-jerk>
+        <printer-configure-ptc-accel>configure</printer-configure-ptc-accel>
+        <printer-configure-ptc-max-speeds>configure</printer-configure-ptc-max-speeds>
+        <printer-configure-con-port>configure</printer-configure-con-port>
+        <printer-configure-con-password>configure</printer-configure-con-password>
+        <!-- Communication settings like baud, buffer, RTS, ... -->
+        <printer-configure-con-com-settings>configure</printer-configure-con-com-settings>
+        <printer-configure-con-timeout>configure</printer-configure-con-timeout>
+        <printer-configure-con-lcd>configure</printer-configure-con-lcd>
+        <printer-configure-con-emergency>configure</printer-configure-con-emergency>
+        <!-- autodetect firmware values -->
+        <printer-configure-con-detect>configure</printer-configure-con-detect>
+
+        <printer-configure-general-name>configure</printer-configure-general-name>
+        <!-- Typical manufacturer settings like urls, model, variant, manufacturer. -->
+        <printer-configure-general-manufacturer>configure</printer-configure-general-manufacturer>
+
+        <printer-configure-general-firmware>configure</printer-configure-general-firmware>
+        <printer-configure-general-door>configure</printer-configure-general-door>
+        <printer-configure-general-idle>configure</printer-configure-general-idle>
+        <printer-configure-general-pause>configure</printer-configure-general-pause>
+        <printer-configure-general-queue>configure</printer-configure-general-queue>
+        <printer-configure-general-share>configure</printer-configure-general-share>
+        <printer-configure-general-history>configure</printer-configure-general-history>
+        <printer-configure-general-del-abort>configure</printer-configure-general-del-abort>
+        <printer-configure-general-compress>configure</printer-configure-general-compress>
+        <printer-configure-general-bed-cleaning>configure</printer-configure-general-bed-cleaning>
+
+        <printer-configure-webcam-timelapse>print,configure</printer-configure-webcam-timelapse>
+        <printer-configure-webcam-control-server>configure</printer-configure-webcam-control-server>
+        <printer-configure-webcam-modify>configure</printer-configure-webcam-modify>
+        <printer-configure-webcam-modify-del>configure</printer-configure-webcam-modify-del>
+        <printer-configure-webcam-modify-add>configure</printer-configure-webcam-modify-add>
+        <printer-configure-webcam-modify-mode>configure</printer-configure-webcam-modify-mode>
+        <printer-configure-webcam-modify-alias>configure</printer-configure-webcam-modify-alias>
+        <printer-configure-webcam-modify-connection>configure</printer-configure-webcam-modify-connection>
+        <printer-configure-webcam-modify-connection-assign>configure</printer-configure-webcam-modify-connection-assign>
+
+        <printer-configure-rescue-power-message>configure</printer-configure-rescue-power-message>
+        <printer-configure-rescue-send-scripts>configure</printer-configure-rescue-send-scripts>
+        <printer-configure-rescue-z-lift>configure</printer-configure-rescue-z-lift>
+        <printer-configure-rescue-autorescue-time>configure</printer-configure-rescue-autorescue-time>
+        <printer-configure-rescue-connection-delay>configure</printer-configure-rescue-connection-delay>
+        <printer-configure-rescue-reactivate-bed>configure</printer-configure-rescue-reactivate-bed>
+        <printer-configure-rescue-replay-extruder>configure</printer-configure-rescue-replay-extruder>
+
+        <printer-configure-gcodes-quick>configure</printer-configure-gcodes-quick>
+        <printer-configure-gcodes-wizards>configure</printer-configure-gcodes-wizards>
+        <printer-configure-gcodes-buttons>configure</printer-configure-gcodes-buttons>
+        <printer-configure-gcodes-event>configure</printer-configure-gcodes-event>
+        <printer-configure-gcodes-response>configure</printer-configure-gcodes-response>
+        <printer-configure-gcodes-replacement>configure</printer-configure-gcodes-replacement>
+        <printer-configure-gcodes-includes>configure</printer-configure-gcodes-includes>
+
+        <!-- The following features do not change if the functions would work.
+        They are only defining which elements are shown to the user in the touch ui
+        for the printer display. touch means show, maintainer or off would disable them.
+         Maintainer will allow activating them when the maintainer mode gets enables. -->
+        <touch-g-codes>touch</touch-g-codes>
+        <touch-queue>touch</touch-queue>
+        <touch-import>touch</touch-import>
+        <touch-last-prints>touch</touch-last-prints>
+        <touch-move>touch</touch-move>
+        <touch-quick-commands>touch</touch-quick-commands>
+        <touch-change-filament>touch</touch-change-filament>
+        <touch-printers>touch</touch-printers>
+        <touch-status>touch</touch-status>
+        <touch-console>touch</touch-console>
+        <touch-printer-commands>touch</touch-printer-commands>
+        <touch-wizards>touch</touch-wizards>
+        <touch-web-actions>touch</touch-web-actions>
+        <touch-gpio>touch</touch-gpio>
+        <touch-server-commands>touch</touch-server-commands>
+        <touch-temp-graphs>touch</touch-temp-graphs>
+        <touch-change-temp>touch</touch-change-temp>
+        <touch-change-fan>touch</touch-change-fan>
+        <touch-change-speed>touch</touch-change-speed>
+        <touch-change-flow>touch</touch-change-flow>
+        <touch-home>touch</touch-home>
+        <touch-babystep>touch</touch-babystep>
+        <touch-extrude>touch</touch-extrude>
+        <touch-webcam>touch</touch-webcam>
+        <touch-messages>touch</touch-messages>
+        <touch-hardware-info>touch</touch-hardware-info>
+        <touch-timelapse>touch</touch-timelapse>
+        <touch-screensaver>touch</touch-screensaver>
+        <touch-language>touch</touch-language>
+        <touch-network>touch</touch-network>
+        <touch-recover>touch</touch-recover>
+        <touch-time-format>touch</touch-time-format>
+        <touch-upgrade>touch</touch-upgrade>
+        <touch-restart-ui>touch</touch-restart-ui>
+        <touch-lock-screen>touch</touch-lock-screen>
+        <touch-time-format>touch</touch-time-format>
+        <touch-print>touch</touch-print>
+        <touch-pause>touch</touch-pause>
+        <touch-stop>touch</touch-stop>
+        <touch-delete-g-code>touch</touch-delete-g-code>
+        <touch-full-stop>touch</touch-full-stop>
+        <touch-shutdown>touch</touch-shutdown>
+        <hardware-info>print</hardware-info>
+    </features>
+</server>

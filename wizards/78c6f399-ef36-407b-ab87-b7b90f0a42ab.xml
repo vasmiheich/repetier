@@ -1,0 +1,109 @@
+<wizardCommand author="Repetier" description="A wizard to generate a temperature tower from your existing pre-sliced g-code" icon="&lt;svg version=&quot;1.1&quot; viewBox=&quot;-10 0 376 1000&quot;&gt;&#xA;   &lt;path fill=&quot;currentColor&quot; d=&quot;M171 734h109v77h-109v-77zM171 552h109v77h-109v-77zM171 370h109v77h-109v-77zM171 188h109v77h-109v-77zM80 83v834h199v-834h-199zM0 0h356v1000h-356v-1000z&quot;&gt;&lt;/path&gt;&#xA;&lt;/svg&gt;" name="Temperature Tower Generator" source="0" uuid="78c6f399-ef36-407b-ab87-b7b90f0a42ab" version="3" visibleWhenPrinting="0">@func addEvents
+  @callOnEvent layerChanged TempTowerLayerChangedEvent
+  @callOnEvent jobFinished UnsubscribeTempTowerLayerChangedEvent
+  @callOnEvent jobKilled UnsubscribeTempTowerLayerChangedEvent
+@endfunc
+
+@func printResults
+  @echo ##########################
+  @echo First Segment Offset: {{global.zOffset}}
+  @echo Segment Size: {{global.segmentSize}}
+  @echo ----
+  @echo Calculated Segments: {{round(global.segmentCount)}}
+  @echo Calculated Temperature Steps: {{round(global.tempSteps)}}°C/Segment
+  @echo ##########################
+@endfunc
+
+@func waitForInfo
+  @if {{job.of_layer==0}}
+    @setTimer 0
+    @waitForTimer 500
+    @call waitForInfo
+  @endif
+@endfunc
+
+@func calculateTempStepsAndStartPrint
+  @printModelByID {{global.printID}}
+  @if {{global.error == 0}}
+    @call waitForInfo
+    @set global.reverseDirection {{ifelse(global.TempTowerTempEnd &lt;= global.TempTowerTempStart, 1, 0)}}
+    @set local.tempDelta {{ifelse(global.reverseDirection == 1, global.tempStart - global.tempEnd, global.tempEnd - global.tempStart)}}
+    @set global.segmentCount {{round(job.z_max - global.zOffset) / global.segmentSize}}
+    @set global.tempSteps {{round(local.tempDelta / round(global.segmentCount - 1))}}
+    @call printResults
+    @set global.nextSegment {{global.zOffset}}
+    @call addEvents
+  @else
+    @error "Error starting print: {{global.error}}. You probably did not set the G-Code ID to a print id. Open the g-code with summary to see the id."
+  @endif
+@endfunc
+
+@func showTempTowerConfigDialog
+  @dialogStart &quot;This is a wizard for generating the right temperatures for a temp tower test&quot; &quot;Temperature Tower Wizard&quot;
+    @dialogBlockingJob
+    @dialogIcon '&lt;svg version=&quot;1.1&quot; viewBox=&quot;-10 0 376 1000&quot;&gt; &lt;path fill=&quot;currentColor&quot; d=&quot;M171 734h109v77h-109v-77zM171 552h109v77h-109v-77zM171 370h109v77h-109v-77zM171 188h109v77h-109v-77zM80 83v834h199v-834h-199zM0 0h356v1000h-356v-1000z&quot;&gt;&lt;/path&gt; &lt;/svg&gt;'
+    @dialogInputInt &quot;Start Temperature&quot; global.tempStart default(220) min({{perm.ext_minTemp}}) max({{perm.ext_maxTemp}}) 
+    @dialogInputInt &quot;End Temperature&quot; global.tempEnd default(180) min({{perm.ext_minTemp}}) max({{perm.ext_maxTemp}})
+    @dialogInputDouble &quot;Segment Size in mm&quot; global.segmentSize min(1) default(6.8)
+    @dialogInputDouble &quot;First Segment Offset in mm&quot; global.zOffset default(0.8) min(0)
+    @dialogInputCheckbox &quot;Retract before heating&quot; global.retractionEnabled default(1)
+    @dialogInputDouble &quot;Retraction length in mm&quot; global.retraction default(3) min(0)
+    @dialogInputCheckbox &quot;Move hotend away when heating&quot; global.homePosEnabled default(1)
+    @dialogInputDouble &quot;X position when heating&quot; global.moveXPos default(0) min({{config.move_x_min}}) max({{config.move_x_max}})
+    @dialogInputDouble &quot;Y position when heating&quot; global.moveYPos default(0) min({{config.move_y_min}}) max({{config.move_y_max}})
+    @dialogInputInt &quot;Temp Tower G-Code ID&quot; global.printID default(0) min(0)
+    @dialogButton &quot;Cancel&quot; 
+    @dialogButton &quot;Help&quot; &quot;@call showTempTowerHelpDialog&quot;
+    @dialogButton &quot;Start print&quot; &quot;@call calculateTempStepsAndStartPrint&quot; 
+  @dialogShow
+@endfunc
+
+@func showTempTowerHelpDialog
+  @dialogStart &quot;&lt;div&gt;This Temperature Tower Wizard transforms an existing, sliced g-code into a temperature test for your printer.&lt;/div&gt;&lt;div&gt;It will increase or decrease the temperature every segment by calculated steps.&lt;/div&gt;&lt;div&gt;To use this wizard, please enter the gradient data and G-Code ID.&lt;/div&gt;&lt;div&gt;You can find the G-Code ID by opening a g-codes summary.&lt;/div&gt;&lt;div&gt;Please make sure that the segment size and your first segment offset is set precisely!&lt;/div&gt;&quot; &quot;Temperature Tower Wizard help&quot;
+    @dialogIcon '&lt;svg version=&quot;1.1&quot; viewBox=&quot;-10 0 376 1000&quot;&gt; &lt;path fill=&quot;currentColor&quot; d=&quot;M171 734h109v77h-109v-77zM171 552h109v77h-109v-77zM171 370h109v77h-109v-77zM171 188h109v77h-109v-77zM80 83v834h199v-834h-199zM0 0h356v1000h-356v-1000z&quot;&gt;&lt;/path&gt; &lt;/svg&gt;'
+    @dialogBlockingJob
+    @dialogButton &quot;OK&quot; &quot;@call showTempTowerConfigDialog&quot; 
+  @dialogShow
+@endfunc
+
+@func TempTowerLayerChangedEvent event 
+  @if {{(state.pos_z &gt;= global.nextSegment)}}
+    @if {{get(&quot;global&quot;,&quot;retractionEnabled&quot;, 1) == 1}} 
+      G1 E-{{global.retraction}}
+    @endif
+    @if {{get(&quot;global&quot;,&quot;homePosEnabled&quot;, 1) == 1}}
+      @set local.lastXPos {{state.pos_x}}
+      @set local.lastYPos {{state.pos_x}}
+      G1 X{{global.moveXPos}} Y{{global.moveYPos}} F{{config.speed_max_xy_per_minute}}
+    @endif
+    @set local.newTemp {{ifelse(global.reverseDirection == 1, ext_0.temp - global.tempSteps, ext_0.temp + global.tempSteps)}}
+    @set local.newTemp {{ifelse(global.zOffset == global.nextSegment, global.tempStart, local.newTemp)}}
+  	M109 S{{local.newTemp}}
+    @if {{get(&quot;global&quot;,&quot;homePosEnabled&quot;,1) == 1}}
+      G1 X{{local.lastXPos}} Y{{local.lastYPos}} F{{config.speed_max_xy_per_minute}}
+    @endif
+    @if {{get(&quot;global&quot;,&quot;retractionEnabled&quot;,1) == 1}} 
+      G1 E-{{global.retraction}}
+    @endif
+    @set global.nextSegment {{global.nextSegment + global.segmentSize}}
+  @endif
+@endfunc
+
+@func UnsubscribeTempTowerLayerChangedEvent event
+  @echo &quot;Removing Temp Tower Generator Event bindings...&quot;
+  @removeCallOnEvent layerChanged TempTowerLayerChangedEvent
+  @removeCallOnEvent jobFinished UnsubscribeTempTowerLayerChangedEvent
+  @removeCallOnEvent jobKilled UnsubscribeTempTowerLayerChangedEvent
+  @echo OK
+@endfunc
+
+@func initTempTowerWizard
+  @set global.layerInterval 10
+  @set global.tempSteps 0 
+  @set perm.ext_minTemp 180
+  @set perm.ext_maxTemp 260
+  @call showTempTowerConfigDialog
+@endfunc
+
+@call initTempTowerWizard
+</wizardCommand>

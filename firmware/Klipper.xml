@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<firmware style="klipper">
+    <!-- Name of the firmware -->
+    <name>Klipper</name>
+    <!-- Commands send on connect. Use newline to insert multiple commands -->
+    <connectionCommands>M105
+        M115
+        M220 S100
+        M221 S100
+        G92 E0
+        G90
+        M82
+        T0
+    </connectionCommands>
+    <!-- Define main communication behaviour
+    okAfterResend - true id after resend:line a line with ok follows
+    protocol - Used communication protocol repetier or ascii
+    allowColonInAscii - Some firmwares have problems with : in ascii content like M117
+    allowUTF8 - true if firmware supports UTF8 in commands. Some firmwares have problems with UTF8.
+    -->
+    <com okAfterResend="false" protocol="ascii" allowColonInAscii="false" allowUTF8="true"/>
+    <!-- Is there a way to query and change eeprom settings?
+      none - No
+      repetier - Repetier format queried with M205 and set with M206
+      marlin - Marlin style report for M503
+      mk4duo - Mk4due style report for M503 -->
+    <eepromType>none</eepromType>
+    <!-- how is E relative handled
+    preferRelative : G91 or E relative make it relative
+    override: G90/G91 overrides E mode
+    separate: G90/G91 do not influence E mode -->
+    <g90_91>override</g90_91>
+    <!-- Server assumes range 0..255 for heater power reported in @ - sets multiplier if firmware has a lower range. -->
+    <temperatureOutputMultiplier>2</temperatureOutputMultiplier>
+    <!-- Defines how firmware handles busy messages. "strict" means ALL commands even known slow commands will
+     send busy messages. "relaxed" means some slow commands might not send busy. -->
+    <busyHandling>relaxed</busyHandling>
+    <!-- These gcodes are known to take longer. When no busy support is detected or busy mode is relaxed,
+    these will not trigger a timeout for a long time. -->
+    <blockingCommands>
+        <command>M109</command>
+        <command>M190</command>
+        <command>M116</command>
+        <command>M303</command>
+        <command>M400</command>
+        <command>M226</command>
+        <command>M600</command>
+        <command>M0</command>
+        <command>M1</command>
+        <command>M48</command>
+        <command>M300</command>
+        <command>M862</command>
+        <command>M863</command>
+        <command>G4</command>
+        <command>G28</command>
+        <command>G29</command>
+        <command>G30</command>
+        <command>G32</command>
+        <command>G33</command>
+        <command>#PID_CALIBRATE</command>
+        <command>#STEPPER_BUZZ</command>
+        <command>#FORCE_MOVE STEPPER</command>
+        <command>#FIRMWARE_RESTART</command>
+        <command>#PROBE</command>
+        <command>#DELTA_CALIBRATE</command>
+        <command>#BED_TILT_CALIBRATE</command>
+        <command>#BED_MESH_CALIBRATE</command>
+        <command>#BED_MESH_MAP</command>
+        <command>#Z_TILT_ADJUST</command>
+        <command>#NEXT</command>
+        <command>#SHAPER_CALIBRATE</command>
+        <command>#TEST_RESONANCES</command>
+        <command>PID_CALIBRATE</command>
+        <command>STEPPER_BUZZ</command>
+        <command>FORCE_MOVE STEPPER</command>
+        <command>FIRMWARE_RESTART</command>
+        <command>PROBE</command>
+        <command>DELTA_CALIBRATE</command>
+        <command>BED_TILT_CALIBRATE</command>
+        <command>BED_MESH_CALIBRATE</command>
+        <command>BED_MESH_MAP</command>
+        <command>Z_TILT_ADJUST</command>
+        <command>NEXT</command>
+        <command>SHAPER_CALIBRATE</command>
+        <command>TEST_RESONANCES</command>
+        <command>@usbreset</command>
+    </blockingCommands>
+    <!-- Normally, the repetier-server tracks the position by the commands that get send.
+    But some commands change the position to an unknown position. Often these report
+    the position, so we can read and use them, except we had already sent move commands since
+    sending a position response. These instructions help to decide if we can trust a position report
+    or if we have to assume that it is already invalidated.
+    In <motionCommand the positionReport defines how positions are reported by firmware. Possible values:
+    relative - identical to values used in G0-G3 including G92 offsets.
+    absolute - excluding G92 offsets
+
+    The <command> tags contain the motion command that if contained, mark it as motion. With attribute
+     reportPosition, you can define if a report happens. The Default value is no. Possible values:
+    no - No report expected
+    yes - Always reports
+    force - Append "reportPosition" gcodes to be sure we get a position that is copied.
+    ask - Send M114 afterward to ensure it is queried in case that firmware version does not report position.
+    -->
+    <motionCommands positonReport="relative">
+        <command>G0</command>
+        <command>G1</command>
+        <command>G2</command>
+        <command>G3</command>
+        <command reportPosition="force">G28</command>
+        <command reportPosition="force">G29</command>
+        <command reportPosition="ask">G30</command>
+        <command reportPosition="force">G33</command>
+        <command reportPosition="yes" move="no">M114</command>
+    </motionCommands>
+    <!-- These gcodes are expected to have a text parameter as last parameter -->
+    <gcodeWithText>
+        <m>20</m>
+        <m>23</m>
+        <m>117</m>
+        <m>118</m>
+    </gcodeWithText>
+    <!-- Priority commands are always put in front of commands to be sent.
+    If the <command> tag has the emergency="true" flag, it will also be sent
+    when the regular buffer is full using the reserved buffer for emergency command.
+    At least if emergency support was reported from firmware.
+    -->
+    <priorityCommands>
+        <command emergency="true">M112</command>
+        <command emergency="true">M108</command>
+        <command emergency="true">@debugcon</command>
+        <command emergency="true">@fakeok</command>
+    </priorityCommands>
+    <!-- Inside the server we use a lot of commands, and we do not always assume they
+    are the same for all firmwares. In that case, we define them here with the <command> tag.
+    type="..." is the predefined name for the action. When these are added, all parameters get
+    a name dependent on the command. You can include the parameter as integer {i:name}
+    or as float value {f:name}. If you need several gcodes for the execution, split them using newline.
+    -->
+    <command type="setFlowMultiply">M221 S{i:flowPercent}</command>
+    <command type="setSpeedMultiply">M220 S{i:speedPercent}</command>
+    <command type="requestTemperature">M105</command>
+    <command type="disableFan">M107</command>
+    <command type="setFanSpeed">M106 S{i:fanSpeed}</command>
+    <command type="setNamedFanSpeed">SET_FAN_SPEED FAN={s:name} SPEED={f:fanSpeed/255}</command>
+    <command type="motorsOff">M84</command>
+    <command type="powerOff">M81</command>
+    <command type="powerOn">M80</command>
+    <command type="setBedTemperature">M140 S{f:temperature}</command>
+    <command type="setBedTemperatureWait">M190 S{f:temperature}</command>
+    <command type="setNamedBedTemperature">SET_HEATER_TEMPERATURE HEATER={s:name} TARGET=S{f:temperature}</command>
+    <!-- Requires M141/M191 alias -->
+    <command type="setChamberTemperature">M141 S{f:temperature}</command>
+    <command type="setChamberTemperatureWait">M191 S{f:temperature}</command>
+    <command type="setNamedChamberTemperature">SET_HEATER_TEMPERATURE HEATER={s:name} TARGET={f:temperature}</command>
+    <command type="setExtruderTemperature">M104 S{f:temperature} T{i:extruder}</command>
+    <command type="setExtruderTemperatureWait">M109 S{f:temperature} T{i:extruder}</command>
+    <command type="setNamedExtruderTemperature">SET_HEATER_TEMPERATURE HEATER={s:name} TARGET={f:temperature}</command>
+    <command type="selectNamedExtruder">ACTIVATE_EXTRUDER EXTRUDER={s:name}</command>
+    <command type="unblock">FIRMWARE_RESTART</command>
+    <!-- please create gcode macro M355 to turn case light pin on/off -->
+    <command type="caseLightsOn">M355 S1</command>
+    <command type="caseLightsOff">M355 S0</command>
+    <command type="waitEndOfMoves">M400</command>
+    <command type="emergencyStop">M112</command>
+    <command type="reportPosition">M114
+        ;@syncMotion</command>
+    <command type="askPosition">M114</command>
+    <command type="babystepZ">#SET_GCODE_OFFSET Z_ADJUST={f:babyz} MOVE=1</command>
+    <command type="resetLineNumber">M110 N0</command>
+    <command type="testConnectionSmall">M114</command>
+    <command type="testConnectionLong">M114 P0 X45.374 Y78.233 E0.0234</command>
+    <command type="testConnectionSlow">G4 P50</command>
+    <command type="homeAll">G28</command>
+    <command type="homeX">G28 X0</command>
+    <command type="homeY">G28 Y0</command>
+    <command type="homeZ">G28 Z0</command>
+    <command type="autolevel">G28
+BED_MESH_CALIBRATE</command>
+    <command type="sendMessage">M117 {s:message}</command>
+    <command type="recoverBadCondition">FIRMWARE_RESTART</command>
+    <command type="sendSimpleProgress">M73 P{i:progress}</command>
+    <command type="quickComTest">M119</command> <!-- sends as dummy command to force getting an extra ok without delay -->
+    <stripJobCommand>M73</stripJobCommand>
+    <!-- Every firmware has its own format when it sends some messages. To detect them,
+    these are defined in <response> tags and the type=".." attribute defines the meaning of the
+    response. When a response is supposed to deliver a value, that value must be
+    merged as the first group in the regular expression. If the value needs to be scaled to the
+    expected range, you can use the factor="1" attribute. All values are float values by default.
+    If a value is a string, add the string="true" attribute. If there is no value, but you need
+    to return a value provide it in the "value="1" attribute.
+    If response expects multiple values, the names of the group order are given as v1="name1",
+    v2="name",...
+
+    Parsing all responses is time-consuming. Therefore, we stop at the first match and
+    run tests in order of appearance, so order matters. If multiple matches are
+    possible, put the attribute last="false" in it and place it BEFORE the
+    response without it.
+    -->
+    <response type="verifiedConnection" value="1" last="false">^ok|^// Klipper state: Ready|^!!</response>
+    <response type="ok" value="-1">^ok\s?</response>
+    <!-- Klipper responds also with unknown command if parameter mismatch, so better not enable detection -->
+    <!-- <response type="unknownCommand" string="true">// Unknown command:\"(.\d+)</response> -->
+    <!-- <response type="halted">^!!</response> -->
+    <!--
+    !! Lost communication with MCU 'mcu'
+    // Klipper state: Disconnect
+    !! Printer is not ready
+    !! mcu 'mcu': Unable to connect
+    -->
+    <response type="conditionOffline">^// Klipper state: Disconnect</response>
+    <response type="conditionShutdown">^// Klipper state: Shutdown|^!! Shutdown|^!! mcu</response>
+    <response type="conditionReady">^// Klipper state: Ready</response>
+    <response type="conditionIgnoring" last="true">^!! (Move|Must home axis first|Extrude below|Invalid adxl345)</response>
+    <!-- Catches also lots of non-critical messages so better ignore and only use shutoff message -->
+    <!--    <response type="conditionShutdown">^!!</response>-->
+    <!-- <response type="conditionShutdown">^!!(?! (Move|Must home axis first|Extrude below))</response> -->
+    <response type="reset" value="1">//\s*Klipper state: Ready</response>
+    <!-- <response type="disablePrinter">//\s*Klipper state: Shutdown</response> -->
+    <response type="conditionShutdown">//\s*Klipper state: Shutdown</response>
+    <!-- <response type="blocked">//\s*\"FIRMWARE_RESTART\"</response> -->
+    <!-- <response type="fatal">//\s*Klipper state: Disconnect</response> -->
+    <response type="outOfFilamentPause" string="true">//\s*action:out_of_filament\b</response>
+    <response type="requestPause" string="true">//\s*RequestPause:(.*)</response>
+    <response type="continuePause">//\s*RequestContinue:</response>
+    <response type="stopPrint">//\s*RequestStop:</response>
+    <response type="requestPause" string="true">//\s*action:pause\b(.*)</response>
+    <response type="continuePause">//\s*action:resume\b</response>
+    <response type="stopPrint">//\s*action:cancel\b</response>
+    <response type="disablePrinter">//\s*action:disconnect\b</response>
+    <response type="requestPauseNoScript" string="true">//\s*action:paused\b\s*(.*)</response>
+    <response type="continuePauseNoScript" string="true">//\s*action:resumed\b\s*(.*)</response>
+    <response type="disablePrinter">//\s*action:disconnect</response>
+    <response type="runScript" string="true">//\s*run_script:(.*)</response>
+    <!-- When we query settings from the printer, we send these values to detect them. -->
+    <getSettings>M115
+M105
+        #version
+    </getSettings>
+    <!-- For every setting we want to query, there is a <setting> tag.
+    The type=".." tells the required name, and the tag content is the regular expression
+    to detect and extract the value form the first matched group. Preset values can be
+    given with value="1" attribute. If the matched value needs a value added, use
+    valueAdd="1" attribute. Useful when index starts with 0 and 1 is expected, for example.
+    Some responses are for a special part, e.g. second extruder. In that case, provide inside
+     the index=".." attribute a regular expression where the first group is the index value.
+     With indexAdd="1" attribute, you can modify the index to expected offset.
+    -->
+    <setting type="firmwareCommunicationWorking" value="1">FIRMWARE_NAME:Klipper|FIRMWARE_RESTART</setting>
+    <setting type="differentFirmware" string="Marlin">FIRMWARE_NAME:Marlin</setting>
+    <setting type="differentFirmware" string="Repetier-Firmware">REPETIER_PROTOCOL</setting>
+    <setting type="differentFirmware" string="RepRapFirmware">FIRMWARE_NAME:\s*RepRapFirmware</setting>
+    <setting type="differentFirmware" string="Smoothieware">System Clock:</setting>
+    <setting type="differentFirmware" string="MK4duo">FIRMWARE_NAME:\s*MK4duo</setting>
+    <setting type="hasHeatedBed" value="1">B:\d+.?\d*</setting>
+    <recover>
+        <!-- Recover replays print but only executes the commands below. Temperature wait commands can be replaced
+        by the non-waiting equivalent. Server will wait before the first move until the last-set temperatures are
+        reached. It will also activate the correct extruder before continue. -->
+        <execute code="G20"></execute>
+        <execute code="G21"></execute>
+        <execute code="G90"></execute>
+        <execute code="G91"></execute>
+
+        <execute code="M82"></execute>
+        <execute code="M83"></execute>
+        <execute code="M85"></execute>
+        <execute code="M92"></execute>
+        <execute code="M104"></execute>
+        <execute code="M106"></execute>
+        <execute code="M107"></execute>
+        <execute code="M109" replace="M104"></execute>
+        <execute code="M140"></execute>
+        <execute code="M141"></execute>
+        <execute code="M163"></execute>
+        <execute code="M190" replace="M140"></execute>
+        <execute code="M191" replace="M141"></execute>
+        <execute code="M200"></execute>
+        <execute code="M201"></execute>
+        <execute code="M202"></execute>
+        <execute code="M203"></execute>
+        <execute code="M204"></execute>
+        <execute code="M280"></execute>
+        <execute code="M221"></execute>
+        <execute code="M220"></execute>
+        <execute code="M900"></execute>
+    </recover>
+</firmware>

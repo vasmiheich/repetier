@@ -1,0 +1,634 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<printer>
+	<general>
+		<name>project-printer</name>
+		<slug>projectprinter</slug>
+		<model/>
+		<manufacturer/>
+		<printerHomepage/>
+		<printerManual/>
+		<firmwareName>Marlin</firmwareName>
+		<printerVariant>cartesian</printerVariant>
+		<active>true</active>
+		<numFans>1</numFans>
+		<tempUpdateEvery>1</tempUpdateEvery>
+		<pauseHandling>0</pauseHandling>
+		<pauseSeconds>120</pauseSeconds>
+		<doorHandling>1</doorHandling>
+		<sdcard>false</sdcard>
+		<softwarePower>false</softwarePower>
+		<softwareLight>false</softwareLight>
+		<defaultVolumetric>false</defaultVolumetric>
+		<logHistory>true</logHistory>
+		<useOwnModelRepository>true</useOwnModelRepository>
+		<enableQueue>true</enableQueue>
+		<useModelFromSlug/>
+		<deleteJobAfterManualStop>false</deleteJobAfterManualStop>
+	</general>
+	<connection>
+		<connectionMethod>0</connectionMethod>
+		<compressCommunication>false</compressCommunication>
+		<continueAfterFastReconnect>true</continueAfterFastReconnect>
+		<password/>
+		<pipe>
+			<file/>
+		</pipe>
+		<ip>
+			<port>23</port>
+			<address/>
+			<keepAliveInterval>20</keepAliveInterval>
+		</ip>
+		<serial>
+			<baudrate>250000</baudrate>
+			<connectionDelay>0</connectionDelay>
+			<rts>0</rts>
+			<dtr>0</dtr>
+			<emergencySolution>0</emergencySolution>
+			<usbreset>0</usbreset>
+			<device>VirtualCartesian</device>
+			<pingPong>true</pingPong>
+			<interceptor>true</interceptor>
+			<visibleWithoutRunning>false</visibleWithoutRunning>
+			<malyanHack>false</malyanHack>
+			<inputBufferSize>127</inputBufferSize>
+			<maxParallelCommands>0</maxParallelCommands>
+			<communicationTimeout>30</communicationTimeout>
+		</serial>
+		<lcdTimeMode>4</lcdTimeMode>
+		<powerOffIdleMinutes>0</powerOffIdleMinutes>
+		<powerOffMaxTemperature>50</powerOffMaxTemperature>
+		<resetScript/>
+	</connection>
+	<movement>
+		<xMin>0</xMin>
+		<xMax>200</xMax>
+		<xHome>0</xHome>
+		<yMin>0</yMin>
+		<yMax>200</yMax>
+		<yHome>0</yHome>
+		<zMin>0</zMin>
+		<zMax>200</zMax>
+		<zHome>0</zHome>
+		<xyJerk>20</xyJerk>
+		<zJerk>0.30000000000000004</zJerk>
+		<timeMultiplier>1</timeMultiplier>
+		<movebuffer>24</movebuffer>
+		<xySpeed max="200">100</xySpeed>
+		<zSpeed max="2">2</zSpeed>
+		<defaultAcceleration>10000</defaultAcceleration>
+		<defaultTravelAcceleration>10000</defaultTravelAcceleration>
+		<defaultRetractAcceleration>4000</defaultRetractAcceleration>
+		<xyPrintAcceleration>1500</xyPrintAcceleration>
+		<xyTravelAcceleration>2500</xyTravelAcceleration>
+		<zPrintAcceleration>100</zPrintAcceleration>
+		<zTravelAcceleration>100</zTravelAcceleration>
+		<startWithAbsolutePositions>true</startWithAbsolutePositions>
+		<endstops all="true" autolevel="false" x="true" y="true" z="true"/>
+		<invert x="false" y="false" z="false"/>
+		<G10Speed>50</G10Speed>
+		<G10Distance>3</G10Distance>
+		<G10LongDistance>50</G10LongDistance>
+		<G11Speed>50</G11Speed>
+		<G11ExtraDistance>0</G11ExtraDistance>
+		<G11ExtraLongDistance>0</G11ExtraLongDistance>
+		<G10ZLift>0</G10ZLift>
+	</movement>
+	<shape>
+		<grid color="#454545" spacing="10"/>
+		<image extension="svg" opacity="50" show="false" zoom="100"/>
+		<rectangle color="#dddddd" xMax="200" xMin="0" yMax="200" yMin="0"/>
+	</shape>
+	<recover>
+		<enabled>false</enabled>
+		<replayExtruderSwitches>false</replayExtruderSwitches>
+		<maxTimeForAutocontinue>300</maxTimeForAutocontinue>
+		<reactivateBedOnConnect>true</reactivateBedOnConnect>
+		<firmwarePowerlossSignal/>
+		<procedure>G28 X0 Y0 R0</procedure>
+		<runOnConnect>G28 X0 Y0 R0</runOnConnect>
+		<extraZOnFirmwareDetect>0</extraZOnFirmwareDetect>
+		<delayBeforeReconnect>30</delayBeforeReconnect>
+	</recover>
+	<extruders>
+		<extruder changeFastDistance="20" changeSlowDistance="20" filamentDiameter="1.75" lastTemp="0" maxTemp="260" num="0" offset="0" supportTemperature="true" tempMaster="0" toolDiameter="0.4" toolType="0">
+			<alias/>
+			<maxSpeed acceleration="10000" jerk="50" max="100"/>
+			<extrude speed="2"/>
+			<retract speed="30"/>
+			<tempChange cooldownPerSecond="0.5" heatupPerSecond="2"/>
+			<offsets x="0" y="0"/>
+			<temperatures>
+				<temperature value="255">ABS 255</temperature>
+				<temperature value="215">PLA 215</temperature>
+				<temperature value="230">PET 230</temperature>
+			</temperatures>
+		</extruder>
+		<extruder changeFastDistance="20" changeSlowDistance="20" filamentDiameter="1.75" lastTemp="0" maxTemp="260" num="1" offset="0" supportTemperature="true" tempMaster="1" toolDiameter="0.4" toolType="0">
+			<alias/>
+			<maxSpeed acceleration="10000" jerk="50" max="100"/>
+			<extrude speed="2"/>
+			<retract speed="30"/>
+			<tempChange cooldownPerSecond="0.5" heatupPerSecond="2"/>
+			<offsets x="0" y="0"/>
+			<temperatures>
+				<temperature value="255">ABS 255</temperature>
+				<temperature value="215">PLA 215</temperature>
+				<temperature value="230">PET 230</temperature>
+			</temperatures>
+		</extruder>
+		<extruder changeFastDistance="20" changeSlowDistance="20" filamentDiameter="1.75" lastTemp="0" maxTemp="260" num="2" offset="0" supportTemperature="true" tempMaster="2" toolDiameter="0.4" toolType="0">
+			<alias/>
+			<maxSpeed acceleration="5000" jerk="30" max="30"/>
+			<extrude speed="2"/>
+			<retract speed="30"/>
+			<tempChange cooldownPerSecond="0.5" heatupPerSecond="2"/>
+			<offsets x="0" y="0"/>
+			<temperatures>
+				<temperature value="255">ABS 255</temperature>
+				<temperature value="215">PLA 215</temperature>
+				<temperature value="230">PET 230</temperature>
+			</temperatures>
+		</extruder>
+		<extruder changeFastDistance="20" changeSlowDistance="20" filamentDiameter="1.75" lastTemp="0" maxTemp="260" num="3" offset="0" supportTemperature="true" tempMaster="3" toolDiameter="0.4" toolType="0">
+			<alias/>
+			<maxSpeed acceleration="5000" jerk="30" max="30"/>
+			<extrude speed="2"/>
+			<retract speed="30"/>
+			<tempChange cooldownPerSecond="0.5" heatupPerSecond="2"/>
+			<offsets x="0" y="0"/>
+			<temperatures>
+				<temperature value="255">ABS 255</temperature>
+				<temperature value="215">PLA 215</temperature>
+				<temperature value="230">PET 230</temperature>
+			</temperatures>
+		</extruder>
+		<extruder changeFastDistance="20" changeSlowDistance="20" filamentDiameter="1.75" lastTemp="0" maxTemp="260" num="4" offset="0" supportTemperature="true" tempMaster="4" toolDiameter="0.4" toolType="0">
+			<alias/>
+			<maxSpeed acceleration="5000" jerk="30" max="30"/>
+			<extrude speed="2"/>
+			<retract speed="30"/>
+			<tempChange cooldownPerSecond="0.5" heatupPerSecond="2"/>
+			<offsets x="0" y="0"/>
+			<temperatures>
+				<temperature value="255">ABS 255</temperature>
+				<temperature value="215">PLA 215</temperature>
+				<temperature value="230">PET 230</temperature>
+			</temperatures>
+		</extruder>
+		<extruder changeFastDistance="20" changeSlowDistance="20" filamentDiameter="1.75" lastTemp="0" maxTemp="260" num="5" offset="0" supportTemperature="true" tempMaster="5" toolDiameter="0.4" toolType="0">
+			<alias/>
+			<maxSpeed acceleration="5000" jerk="30" max="30"/>
+			<extrude speed="2"/>
+			<retract speed="30"/>
+			<tempChange cooldownPerSecond="0.5" heatupPerSecond="2"/>
+			<offsets x="0" y="0"/>
+			<temperatures>
+				<temperature value="255">ABS 255</temperature>
+				<temperature value="215">PLA 215</temperature>
+				<temperature value="230">PET 230</temperature>
+			</temperatures>
+		</extruder>
+		<extruder changeFastDistance="20" changeSlowDistance="20" filamentDiameter="1.75" lastTemp="0" maxTemp="260" num="6" offset="0" supportTemperature="true" tempMaster="6" toolDiameter="0.4" toolType="0">
+			<alias/>
+			<maxSpeed acceleration="5000" jerk="30" max="30"/>
+			<extrude speed="2"/>
+			<retract speed="30"/>
+			<tempChange cooldownPerSecond="0.5" heatupPerSecond="2"/>
+			<offsets x="0" y="0"/>
+			<temperatures>
+				<temperature value="255">ABS 255</temperature>
+				<temperature value="215">PLA 215</temperature>
+				<temperature value="230">PET 230</temperature>
+			</temperatures>
+		</extruder>
+		<extruder changeFastDistance="20" changeSlowDistance="20" filamentDiameter="1.75" lastTemp="0" maxTemp="260" num="7" offset="0" supportTemperature="true" tempMaster="7" toolDiameter="0.4" toolType="0">
+			<alias/>
+			<maxSpeed acceleration="5000" jerk="30" max="30"/>
+			<extrude speed="2"/>
+			<retract speed="30"/>
+			<tempChange cooldownPerSecond="0.5" heatupPerSecond="2"/>
+			<offsets x="0" y="0"/>
+			<temperatures>
+				<temperature value="255">ABS 255</temperature>
+				<temperature value="215">PLA 215</temperature>
+				<temperature value="230">PET 230</temperature>
+			</temperatures>
+		</extruder>
+		<extruder changeFastDistance="20" changeSlowDistance="20" filamentDiameter="1.75" lastTemp="0" maxTemp="260" num="8" offset="0" supportTemperature="true" tempMaster="8" toolDiameter="0.4" toolType="0">
+			<alias/>
+			<maxSpeed acceleration="5000" jerk="30" max="30"/>
+			<extrude speed="2"/>
+			<retract speed="30"/>
+			<tempChange cooldownPerSecond="0.5" heatupPerSecond="2"/>
+			<offsets x="0" y="0"/>
+			<temperatures>
+				<temperature value="255">ABS 255</temperature>
+				<temperature value="215">PLA 215</temperature>
+				<temperature value="230">PET 230</temperature>
+			</temperatures>
+		</extruder>
+		<extruder changeFastDistance="20" changeSlowDistance="20" filamentDiameter="1.75" lastTemp="0" maxTemp="260" num="9" offset="0" supportTemperature="true" tempMaster="9" toolDiameter="0.4" toolType="0">
+			<alias/>
+			<maxSpeed acceleration="5000" jerk="30" max="30"/>
+			<extrude speed="2"/>
+			<retract speed="30"/>
+			<tempChange cooldownPerSecond="0.5" heatupPerSecond="2"/>
+			<offsets x="0" y="0"/>
+			<temperatures>
+				<temperature value="255">ABS 255</temperature>
+				<temperature value="215">PLA 215</temperature>
+				<temperature value="230">PET 230</temperature>
+			</temperatures>
+		</extruder>
+		<extruder changeFastDistance="20" changeSlowDistance="20" filamentDiameter="1.75" lastTemp="0" maxTemp="260" num="10" offset="0" supportTemperature="true" tempMaster="10" toolDiameter="0.4" toolType="0">
+			<alias/>
+			<maxSpeed acceleration="5000" jerk="30" max="30"/>
+			<extrude speed="2"/>
+			<retract speed="30"/>
+			<tempChange cooldownPerSecond="0.5" heatupPerSecond="2"/>
+			<offsets x="0" y="0"/>
+			<temperatures>
+				<temperature value="255">ABS 255</temperature>
+				<temperature value="215">PLA 215</temperature>
+				<temperature value="230">PET 230</temperature>
+			</temperatures>
+		</extruder>
+		<extruder changeFastDistance="20" changeSlowDistance="20" filamentDiameter="1.75" lastTemp="0" maxTemp="260" num="11" offset="0" supportTemperature="true" tempMaster="11" toolDiameter="0.4" toolType="0">
+			<alias/>
+			<maxSpeed acceleration="5000" jerk="30" max="30"/>
+			<extrude speed="2"/>
+			<retract speed="30"/>
+			<tempChange cooldownPerSecond="0.5" heatupPerSecond="2"/>
+			<offsets x="0" y="0"/>
+			<temperatures>
+				<temperature value="255">ABS 255</temperature>
+				<temperature value="215">PLA 215</temperature>
+				<temperature value="230">PET 230</temperature>
+			</temperatures>
+		</extruder>
+		<extruder changeFastDistance="20" changeSlowDistance="20" filamentDiameter="1.75" lastTemp="0" maxTemp="260" num="12" offset="0" supportTemperature="true" tempMaster="12" toolDiameter="0.4" toolType="0">
+			<alias/>
+			<maxSpeed acceleration="5000" jerk="30" max="30"/>
+			<extrude speed="2"/>
+			<retract speed="30"/>
+			<tempChange cooldownPerSecond="0.5" heatupPerSecond="2"/>
+			<offsets x="0" y="0"/>
+			<temperatures>
+				<temperature value="255">ABS 255</temperature>
+				<temperature value="215">PLA 215</temperature>
+				<temperature value="230">PET 230</temperature>
+			</temperatures>
+		</extruder>
+		<extruder changeFastDistance="20" changeSlowDistance="20" filamentDiameter="1.75" lastTemp="0" maxTemp="260" num="13" offset="0" supportTemperature="true" tempMaster="13" toolDiameter="0.4" toolType="0">
+			<alias/>
+			<maxSpeed acceleration="5000" jerk="30" max="30"/>
+			<extrude speed="2"/>
+			<retract speed="30"/>
+			<tempChange cooldownPerSecond="0.5" heatupPerSecond="2"/>
+			<offsets x="0" y="0"/>
+			<temperatures>
+				<temperature value="255">ABS 255</temperature>
+				<temperature value="215">PLA 215</temperature>
+				<temperature value="230">PET 230</temperature>
+			</temperatures>
+		</extruder>
+		<extruder changeFastDistance="20" changeSlowDistance="20" filamentDiameter="1.75" lastTemp="0" maxTemp="260" num="14" offset="0" supportTemperature="true" tempMaster="14" toolDiameter="0.4" toolType="0">
+			<alias/>
+			<maxSpeed acceleration="5000" jerk="30" max="30"/>
+			<extrude speed="2"/>
+			<retract speed="30"/>
+			<tempChange cooldownPerSecond="0.5" heatupPerSecond="2"/>
+			<offsets x="0" y="0"/>
+			<temperatures>
+				<temperature value="255">ABS 255</temperature>
+				<temperature value="215">PLA 215</temperature>
+				<temperature value="230">PET 230</temperature>
+			</temperatures>
+		</extruder>
+		<extruder changeFastDistance="20" changeSlowDistance="20" filamentDiameter="1.75" lastTemp="0" maxTemp="260" num="15" offset="0" supportTemperature="true" tempMaster="15" toolDiameter="0.4" toolType="0">
+			<alias/>
+			<maxSpeed acceleration="5000" jerk="30" max="30"/>
+			<extrude speed="2"/>
+			<retract speed="30"/>
+			<tempChange cooldownPerSecond="0.5" heatupPerSecond="2"/>
+			<offsets x="0" y="0"/>
+			<temperatures>
+				<temperature value="255">ABS 255</temperature>
+				<temperature value="215">PLA 215</temperature>
+				<temperature value="230">PET 230</temperature>
+			</temperatures>
+		</extruder>
+		<extruder changeFastDistance="20" changeSlowDistance="20" filamentDiameter="1.75" lastTemp="0" maxTemp="260" num="16" offset="0" supportTemperature="true" tempMaster="16" toolDiameter="0.4" toolType="0">
+			<alias/>
+			<maxSpeed acceleration="5000" jerk="30" max="30"/>
+			<extrude speed="2"/>
+			<retract speed="30"/>
+			<tempChange cooldownPerSecond="0.5" heatupPerSecond="2"/>
+			<offsets x="0" y="0"/>
+			<temperatures>
+				<temperature value="255">ABS 255</temperature>
+				<temperature value="215">PLA 215</temperature>
+				<temperature value="230">PET 230</temperature>
+			</temperatures>
+		</extruder>
+		<extruder changeFastDistance="20" changeSlowDistance="20" filamentDiameter="1.75" lastTemp="0" maxTemp="260" num="17" offset="0" supportTemperature="true" tempMaster="17" toolDiameter="0.4" toolType="0">
+			<alias/>
+			<maxSpeed acceleration="5000" jerk="30" max="30"/>
+			<extrude speed="2"/>
+			<retract speed="30"/>
+			<tempChange cooldownPerSecond="0.5" heatupPerSecond="2"/>
+			<offsets x="0" y="0"/>
+			<temperatures>
+				<temperature value="255">ABS 255</temperature>
+				<temperature value="215">PLA 215</temperature>
+				<temperature value="230">PET 230</temperature>
+			</temperatures>
+		</extruder>
+		<extruder changeFastDistance="20" changeSlowDistance="20" filamentDiameter="1.75" lastTemp="0" maxTemp="260" num="18" offset="0" supportTemperature="true" tempMaster="18" toolDiameter="0.4" toolType="0">
+			<alias/>
+			<maxSpeed acceleration="5000" jerk="30" max="30"/>
+			<extrude speed="2"/>
+			<retract speed="30"/>
+			<tempChange cooldownPerSecond="0.5" heatupPerSecond="2"/>
+			<offsets x="0" y="0"/>
+			<temperatures>
+				<temperature value="255">ABS 255</temperature>
+				<temperature value="215">PLA 215</temperature>
+				<temperature value="230">PET 230</temperature>
+			</temperatures>
+		</extruder>
+		<extruder changeFastDistance="20" changeSlowDistance="20" filamentDiameter="1.75" lastTemp="0" maxTemp="260" num="19" offset="0" supportTemperature="true" tempMaster="19" toolDiameter="0.4" toolType="0">
+			<alias/>
+			<maxSpeed acceleration="5000" jerk="30" max="30"/>
+			<extrude speed="2"/>
+			<retract speed="30"/>
+			<tempChange cooldownPerSecond="0.5" heatupPerSecond="2"/>
+			<offsets x="0" y="0"/>
+			<temperatures>
+				<temperature value="255">ABS 255</temperature>
+				<temperature value="215">PLA 215</temperature>
+				<temperature value="230">PET 230</temperature>
+			</temperatures>
+		</extruder>
+		<extruder changeFastDistance="20" changeSlowDistance="20" filamentDiameter="1.75" lastTemp="0" maxTemp="260" num="20" offset="0" supportTemperature="true" tempMaster="20" toolDiameter="0.4" toolType="0">
+			<alias/>
+			<maxSpeed acceleration="5000" jerk="30" max="30"/>
+			<extrude speed="2"/>
+			<retract speed="30"/>
+			<tempChange cooldownPerSecond="0.5" heatupPerSecond="2"/>
+			<offsets x="0" y="0"/>
+			<temperatures>
+				<temperature value="255">ABS 255</temperature>
+				<temperature value="215">PLA 215</temperature>
+				<temperature value="230">PET 230</temperature>
+			</temperatures>
+		</extruder>
+		<extruder changeFastDistance="20" changeSlowDistance="20" filamentDiameter="1.75" lastTemp="0" maxTemp="260" num="21" offset="0" supportTemperature="true" tempMaster="21" toolDiameter="0.4" toolType="0">
+			<alias/>
+			<maxSpeed acceleration="5000" jerk="30" max="30"/>
+			<extrude speed="2"/>
+			<retract speed="30"/>
+			<tempChange cooldownPerSecond="0.5" heatupPerSecond="2"/>
+			<offsets x="0" y="0"/>
+			<temperatures>
+				<temperature value="255">ABS 255</temperature>
+				<temperature value="215">PLA 215</temperature>
+				<temperature value="230">PET 230</temperature>
+			</temperatures>
+		</extruder>
+		<extruder changeFastDistance="20" changeSlowDistance="20" filamentDiameter="1.75" lastTemp="0" maxTemp="260" num="22" offset="0" supportTemperature="true" tempMaster="22" toolDiameter="0.4" toolType="0">
+			<alias/>
+			<maxSpeed acceleration="5000" jerk="30" max="30"/>
+			<extrude speed="2"/>
+			<retract speed="30"/>
+			<tempChange cooldownPerSecond="0.5" heatupPerSecond="2"/>
+			<offsets x="0" y="0"/>
+			<temperatures>
+				<temperature value="255">ABS 255</temperature>
+				<temperature value="215">PLA 215</temperature>
+				<temperature value="230">PET 230</temperature>
+			</temperatures>
+		</extruder>
+		<extruder changeFastDistance="20" changeSlowDistance="20" filamentDiameter="1.75" lastTemp="0" maxTemp="260" num="23" offset="0" supportTemperature="true" tempMaster="23" toolDiameter="0.4" toolType="0">
+			<alias/>
+			<maxSpeed acceleration="5000" jerk="30" max="30"/>
+			<extrude speed="2"/>
+			<retract speed="30"/>
+			<tempChange cooldownPerSecond="0.5" heatupPerSecond="2"/>
+			<offsets x="0" y="0"/>
+			<temperatures>
+				<temperature value="255">ABS 255</temperature>
+				<temperature value="215">PLA 215</temperature>
+				<temperature value="230">PET 230</temperature>
+			</temperatures>
+		</extruder>
+		<extruder changeFastDistance="20" changeSlowDistance="20" filamentDiameter="1.75" lastTemp="0" maxTemp="260" num="24" offset="0" supportTemperature="true" tempMaster="24" toolDiameter="0.4" toolType="0">
+			<alias/>
+			<maxSpeed acceleration="5000" jerk="30" max="30"/>
+			<extrude speed="2"/>
+			<retract speed="30"/>
+			<tempChange cooldownPerSecond="0.5" heatupPerSecond="2"/>
+			<offsets x="0" y="0"/>
+			<temperatures>
+				<temperature value="255">ABS 255</temperature>
+				<temperature value="215">PLA 215</temperature>
+				<temperature value="230">PET 230</temperature>
+			</temperatures>
+		</extruder>
+		<extruder changeFastDistance="20" changeSlowDistance="20" filamentDiameter="1.75" lastTemp="0" maxTemp="260" num="25" offset="0" supportTemperature="true" tempMaster="25" toolDiameter="0.4" toolType="0">
+			<alias/>
+			<maxSpeed acceleration="5000" jerk="30" max="30"/>
+			<extrude speed="2"/>
+			<retract speed="30"/>
+			<tempChange cooldownPerSecond="0.5" heatupPerSecond="2"/>
+			<offsets x="0" y="0"/>
+			<temperatures>
+				<temperature value="255">ABS 255</temperature>
+				<temperature value="215">PLA 215</temperature>
+				<temperature value="230">PET 230</temperature>
+			</temperatures>
+		</extruder>
+		<extruder changeFastDistance="20" changeSlowDistance="20" filamentDiameter="1.75" lastTemp="0" maxTemp="260" num="26" offset="0" supportTemperature="true" tempMaster="26" toolDiameter="0.4" toolType="0">
+			<alias/>
+			<maxSpeed acceleration="5000" jerk="30" max="30"/>
+			<extrude speed="2"/>
+			<retract speed="30"/>
+			<tempChange cooldownPerSecond="0.5" heatupPerSecond="2"/>
+			<offsets x="0" y="0"/>
+			<temperatures>
+				<temperature value="255">ABS 255</temperature>
+				<temperature value="215">PLA 215</temperature>
+				<temperature value="230">PET 230</temperature>
+			</temperatures>
+		</extruder>
+		<extruder changeFastDistance="20" changeSlowDistance="20" filamentDiameter="1.75" lastTemp="0" maxTemp="260" num="27" offset="0" supportTemperature="true" tempMaster="27" toolDiameter="0.4" toolType="0">
+			<alias/>
+			<maxSpeed acceleration="5000" jerk="30" max="30"/>
+			<extrude speed="2"/>
+			<retract speed="30"/>
+			<tempChange cooldownPerSecond="0.5" heatupPerSecond="2"/>
+			<offsets x="0" y="0"/>
+			<temperatures>
+				<temperature value="255">ABS 255</temperature>
+				<temperature value="215">PLA 215</temperature>
+				<temperature value="230">PET 230</temperature>
+			</temperatures>
+		</extruder>
+		<extruder changeFastDistance="20" changeSlowDistance="20" filamentDiameter="1.75" lastTemp="0" maxTemp="260" num="28" offset="0" supportTemperature="true" tempMaster="28" toolDiameter="0.4" toolType="0">
+			<alias/>
+			<maxSpeed acceleration="5000" jerk="30" max="30"/>
+			<extrude speed="2"/>
+			<retract speed="30"/>
+			<tempChange cooldownPerSecond="0.5" heatupPerSecond="2"/>
+			<offsets x="0" y="0"/>
+			<temperatures>
+				<temperature value="255">ABS 255</temperature>
+				<temperature value="215">PLA 215</temperature>
+				<temperature value="230">PET 230</temperature>
+			</temperatures>
+		</extruder>
+		<extruder changeFastDistance="20" changeSlowDistance="20" filamentDiameter="1.75" lastTemp="0" maxTemp="260" num="29" offset="0" supportTemperature="true" tempMaster="29" toolDiameter="0.4" toolType="0">
+			<alias/>
+			<maxSpeed acceleration="5000" jerk="30" max="30"/>
+			<extrude speed="2"/>
+			<retract speed="30"/>
+			<tempChange cooldownPerSecond="0.5" heatupPerSecond="2"/>
+			<offsets x="0" y="0"/>
+			<temperatures>
+				<temperature value="255">ABS 255</temperature>
+				<temperature value="215">PLA 215</temperature>
+				<temperature value="230">PET 230</temperature>
+			</temperatures>
+		</extruder>
+		<extruder changeFastDistance="20" changeSlowDistance="20" filamentDiameter="1.75" lastTemp="0" maxTemp="260" num="30" offset="0" supportTemperature="true" tempMaster="30" toolDiameter="0.4" toolType="0">
+			<alias/>
+			<maxSpeed acceleration="5000" jerk="30" max="30"/>
+			<extrude speed="2"/>
+			<retract speed="30"/>
+			<tempChange cooldownPerSecond="0.5" heatupPerSecond="2"/>
+			<offsets x="0" y="0"/>
+			<temperatures>
+				<temperature value="255">ABS 255</temperature>
+				<temperature value="215">PLA 215</temperature>
+				<temperature value="230">PET 230</temperature>
+			</temperatures>
+		</extruder>
+		<extruder changeFastDistance="20" changeSlowDistance="20" filamentDiameter="1.75" lastTemp="0" maxTemp="260" num="31" offset="0" supportTemperature="true" tempMaster="31" toolDiameter="0.4" toolType="0">
+			<alias/>
+			<maxSpeed acceleration="5000" jerk="30" max="30"/>
+			<extrude speed="2"/>
+			<retract speed="30"/>
+			<tempChange cooldownPerSecond="0.5" heatupPerSecond="2"/>
+			<offsets x="0" y="0"/>
+			<temperatures>
+				<temperature value="255">ABS 255</temperature>
+				<temperature value="215">PLA 215</temperature>
+				<temperature value="230">PET 230</temperature>
+			</temperatures>
+		</extruder>
+	</extruders>
+	<fanPresets/>
+	<flowPresets/>
+	<speedPresets/>
+	<heatedBeds>
+		<heatedBed lastTemp="0" maxTemp="120" num="0" offset="0">
+			<alias/>
+			<tempChange cooldownPerSecond="0.1" heatupPerSecond="0.1"/>
+			<temperatures/>
+		</heatedBed>
+	</heatedBeds>
+	<heatedChambers>
+		<heatedChamber lastTemp="0" maxTemp="110" num="0" offset="0">
+			<alias/>
+			<tempChange cooldownPerSecond="0.1" heatupPerSecond="0.1"/>
+			<temperatures/>
+		</heatedChamber>
+	</heatedChambers>
+	<buttonCommands>
+		<button name="Auto Bed Leveling"/>
+		<button name="Home"/>
+		<button name="Home X"/>
+		<button name="Home Y"/>
+		<button name="Home Z"/>
+		<button name="Light Off"/>
+		<button name="Light On"/>
+		<button name="Motors Off"/>
+		<button name="Power Off"/>
+		<button name="Power On"/>
+	</buttonCommands>
+	<quickCommands/>
+	<wizardCommands/>
+	<responseEvents/>
+	<gcodeReplacements/>
+	<webcams/>
+	<properties/>
+<scripts>
+		<script name="activate">; Runs when printer gets activated.
+; At that point the printer is often not connected, so you should only use server commands here.
+</script>
+		<script name="deactivate">; Runs when printer gets deactivated.
+; At that point the printer is likely not connected, so you should only use server commands here.
+; Also runtime is limited to 5 seconds until a connection is forced to go down.
+</script>
+		<script name="end">; Sample end code - modify to your needs!
+M400 ; Wait for current moves to finish, clearing the buffer
+M104 T0 S0 ; Disable extruder
+M104 T1 S0 ; Disable extruder
+M104 T2 S0 ; Disable extruder
+M104 T3 S0 ; Disable extruder
+M104 T4 S0 ; Disable extruder
+M104 T5 S0 ; Disable extruder
+M104 T6 S0 ; Disable extruder
+M104 T7 S0 ; Disable extruder
+M104 T8 S0 ; Disable extruder
+M104 T9 S0 ; Disable extruder
+M104 T10 S0 ; Disable extruder
+M104 T11 S0 ; Disable extruder
+M104 T12 S0 ; Disable extruder
+M104 T13 S0 ; Disable extruder
+M104 T14 S0 ; Disable extruder
+M104 T15 S0 ; Disable extruder
+M140 S0 ; Disable bed
+M141 S0 ; Disable chamber
+G1 X0 Y200 F9000
+M84 ; Disable motor
+</script>
+		<script name="kill">; Sample stop code - modify to your needs!
+M400 ; Wait for current moves to finish, clearing the buffer
+M104 T0 S0 ; Disable extruder
+M104 T1 S0 ; Disable extruder
+M104 T2 S0 ; Disable extruder
+M104 T3 S0 ; Disable extruder
+M104 T4 S0 ; Disable extruder
+M104 T5 S0 ; Disable extruder
+M104 T6 S0 ; Disable extruder
+M104 T7 S0 ; Disable extruder
+M104 T8 S0 ; Disable extruder
+M104 T9 S0 ; Disable extruder
+M104 T10 S0 ; Disable extruder
+M104 T11 S0 ; Disable extruder
+M104 T12 S0 ; Disable extruder
+M104 T13 S0 ; Disable extruder
+M104 T14 S0 ; Disable extruder
+M104 T15 S0 ; Disable extruder
+M140 S0 ; Disable bed
+M141 S0 ; Disable chamber
+G1 X0 Y200 F9000
+M84 ; Disable motor
+</script>
+		<script name="pause">; Sample pause code - modify to your needs!
+M83 ; relative extrusion mode
+G1 E-3 F1800 ; Retract a bit to reduce oozing
+G1 X0 Y200 F9000
+</script>
+		<script name="insert_filament_finished">; Retract to be at same retraction with new filament
+; as you would be after pause start.
+; Remove if you also remove the corresponding line in pause event script.
+@ifPaused
+G92 E0
+G1 E-3 F1800
+G92 E0 ; // continue will restore old extruder position
+@endif        
+        </script>
+	</scripts>
+</printer>
